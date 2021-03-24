@@ -1,4 +1,4 @@
-import java.lang.Math;
+package funWithSolids;
 
 public class RectangularPrism extends Solid {
 

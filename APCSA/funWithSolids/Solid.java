@@ -1,3 +1,5 @@
+package funWithSolids;
+
 public class Solid {
 	private String myName;
 

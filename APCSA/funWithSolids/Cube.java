@@ -1,3 +1,5 @@
+package funWithSolids;
+
 import java.lang.Math;
 
 public class Cube extends RectangularPrism {
