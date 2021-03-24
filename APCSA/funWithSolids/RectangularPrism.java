@@ -42,6 +42,6 @@ public class RectangularPrism extends Solid {
 
   @Override
   public double surfaceArea() {
-    return 2 * length * width + 2 * width * height + 2 * height * length;
+    return 2 * (length * width + width * height + height * length);
   }
 }

@@ -16,8 +16,6 @@ public class Main {
         Thread.sleep(50);
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, 852, 480);*/
-          r.drawTri(0, 0, 100, 0, 100, 100, 100, 100, 100);
-          r.drawTri(0, 0, 100, 100, 0, 100, 100, 100, 100);
           Thread.sleep(100);
           g.setColor(Color.WHITE);
           g.fillRect(0, 0, 852, 480);

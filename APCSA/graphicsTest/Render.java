@@ -119,10 +119,17 @@ public class Render extends DrawingPanel{
     if((p1[0] != -1 && p1[1] != -1) && (p2[0] != -1 && p2[1] != -1)) g2.draw(new Line2D.Float(p1[0], p1[1], p2[0], p2[1]));
   }
 
-  public void drawTri(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3){
-    drawLine(x1, y1, z1, x2, y2, z2);
-    drawLine(x2, y2, z2, x3, y3, z3);
-    drawLine(x3, y3, z3, x1, y1, z1);
+  public void drawLine(double[] p13d, double[] p23d){
+    int[] p1 = drawPoint(p13d);
+    int[] p2 = drawPoint(p23d);
+    g2.setPaint(Color.BLACK);
+    if((p1[0] != -1 && p1[1] != -1) && (p2[0] != -1 && p2[1] != -1)) g2.draw(new Line2D.Float(p1[0], p1[1], p2[0], p2[1]));
+  }
+
+  public void drawTri(Tri t){
+    for(int i = 0; i < 2; i++){
+      drawLine(t.getPoint(i), t.getPoint(i + 1 == 3 ? 0 : i + 1));
+    }
   }
 
   public void drawCube(double x1, double y1, double z1, double x2, double y2, double z2){
