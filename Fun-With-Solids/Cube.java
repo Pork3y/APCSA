@@ -1,6 +1,7 @@
 import java.lang.Math;
 
 public class Cube extends RectangularPrism {
+
     public Cube(String name, double length) {
         super(name, length, length, length);
     }
@@ -12,6 +13,6 @@ public class Cube extends RectangularPrism {
 
     @Override
     public double surfaceArea() {
-        return 4 * Math.pow(getLength(), 2);
+        return 6.0 * Math.pow(getLength(), 2);
     }
 }

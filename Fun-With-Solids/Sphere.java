@@ -18,7 +18,7 @@ public class Sphere extends Solid{
   }
 
   public double volume(){
-    return 4 / 3 * Math.PI * Math.pow(radius, 3);
+    return 4.0 / 3 * Math.PI * Math.pow(radius, 3);
   }
 
   public double surfaceArea(){
