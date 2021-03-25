@@ -119,7 +119,7 @@ public class Render extends DrawingPanel{
     if((p1[0] != -1 && p1[1] != -1) && (p2[0] != -1 && p2[1] != -1)) g2.draw(new Line2D.Float(p1[0], p1[1], p2[0], p2[1]));
   }
 
-  public void drawLine(double[] p13d, double[] p23d){
+  public void drawLine(Point3D p13d, Point3D p23d){
     int[] p1 = drawPoint(p13d);
     int[] p2 = drawPoint(p23d);
     g2.setPaint(Color.BLACK);

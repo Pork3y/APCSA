@@ -29,6 +29,8 @@ public class Main {
 		Cube cube = new Cube("My cube", 4);
 		solids.add(cube);
 
+		Object o = new Object();
+
 		presentSolids(solids);
 	}
 
@@ -37,7 +39,7 @@ public class Main {
 			String name = s.getName();
 			double volume = round(s.volume(), 2);
 			double surfaceArea = round(s.surfaceArea(), 2);
-			System.out.println(s.getClass().getSimpleName() + name + " has volume: " + volume +
+			System.out.println(s.getClass().getSimpleName() + " " + name + " has volume: " + volume +
 								" and surface area: " + surfaceArea + ".");
 		}
 	}

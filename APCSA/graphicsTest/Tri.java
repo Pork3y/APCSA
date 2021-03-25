@@ -1,12 +1,12 @@
 public class Tri {
 
-    double[][] coords;
+    Point3D[] coords;
 
-    public Tri(double[][] coords){
+    public Tri(Point3D[] coords){
         this.coords = coords;
     }
 
-    public double[] getPoint(int index){
+    public Point3D getPoint(int index){
         return coords[index];
     }
 }

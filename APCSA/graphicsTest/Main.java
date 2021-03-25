@@ -7,6 +7,10 @@ public class Main {
       Graphics g = r.getGraphics();
       g.setColor(new Color(255, 255, 255));
 
+      Point3D p1 = new Point3D(0, 0, 100);
+      Point3D p2 = new Point3D(100, 0, 100);
+      Point3D p3 = new Point3D(100 * Math.sqrt(3) / 2, 0, 100 + 100 * Math.sqrt(3 / 2));
+
       while(true){
         /*r.drawPoint(new double[]{0, 0, 50});
         for(double i = 0; i < 5; i++){
