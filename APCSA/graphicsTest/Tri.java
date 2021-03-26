@@ -1,3 +1,5 @@
+package graphicsTest;
+
 public class Tri {
 
     Point3D[] coords;

@@ -1,8 +1,9 @@
+package graphicsTest;
 
 public class Point3D {
 
     final double[] ORIGIN = new double[]{0, 0, 0};
-    public double[] coords;
+    public double[] coords = new double[3];
 
     public Point3D(double[] coords){
         this.coords = coords;

@@ -26,6 +26,7 @@ Latest changes:
 - purple highlight (happy medium for both HW3/HW6)
 */
 
+package graphicsTest;
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;

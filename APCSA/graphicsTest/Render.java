@@ -1,3 +1,4 @@
+package graphicsTest;
 import java.util.*;
 import java.io.*;
 import java.awt.*;
@@ -112,6 +113,10 @@ public class Render extends DrawingPanel{
     }
   }
 
+  public int[] drawPoint(Point3D p1){
+    return drawPoint(p1.getCoords());
+  }
+
   public void drawLine(double x1, double y1, double z1, double x2, double y2, double z2){
     int[] p1 = drawPoint(new double[] {x1, y1, z1});
     int[] p2 = drawPoint(new double[] {x2, y2, z2});
@@ -127,11 +132,12 @@ public class Render extends DrawingPanel{
   }
 
   public void drawTri(Tri t){
-    for(int i = 0; i < 2; i++){
+    for(int i = 0; i <= 2; i++){
       drawLine(t.getPoint(i), t.getPoint(i + 1 == 3 ? 0 : i + 1));
     }
   }
 
+  @Deprecated
   public void drawCube(double x1, double y1, double z1, double x2, double y2, double z2){
     drawLine(x1, y1, z1, x1, y2, z1);
     drawLine(x1, y1, z1, x2, y1, z1);
