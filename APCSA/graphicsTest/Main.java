@@ -31,13 +31,13 @@ public class Main {
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, 852, 480);
 
-          /*r.drawTri(t1);
-          r.drawTri(t2);
-          r.drawTri(t3);
-          r.drawTri(t4);
-          Thread.sleep(100);
-          g.setColor(Color.WHITE);
-          g.fillRect(0, 0, 852, 480);*/
+        /*r.drawTri(t1);
+        r.drawTri(t2);
+        r.drawTri(t3);
+        r.drawTri(t4);
+        Thread.sleep(100);
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, 852, 480);*/
       }
 
 	}

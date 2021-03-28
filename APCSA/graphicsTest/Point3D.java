@@ -18,4 +18,8 @@ public class Point3D {
     public double[] getCoords() {
         return coords;
     }
+
+    public String toString(){
+        return coords[0] + " " + coords[1] + " " + coords[2];
+    }
 }

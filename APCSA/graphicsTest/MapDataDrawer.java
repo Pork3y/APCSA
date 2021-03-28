@@ -85,7 +85,7 @@ public class MapDataDrawer {
 
   /**
    * Find a path from West-to-East starting at given row.
-   * Choose a foward step out of 3 possible forward locations, using greedy method described in assignment.
+   * Choose a forward step out of 3 possible forward locations, using greedy method described in assignment.
    * @return the total change in elevation traveled from West-to-East
    */
 

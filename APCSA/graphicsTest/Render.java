@@ -6,16 +6,20 @@ import java.awt.event.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
 
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 public class Render extends DrawingPanel{
   private double xCam;
   private double yCam;
   private double zCam;
   private double camAngleX;
   private double camAngleY;
+  private double camRoll = 0;
   private double depth;
-  private double dx;
-  private int width = 852;
-  private int height = 480;
+  final private double dx = 15;
+  final private int width = 852;
+  final private int height = 480;
 
   public Render(double fieldOfView, double angleX, double angleY, double[] camCoords){
     super(852, 480);
@@ -25,7 +29,6 @@ public class Render extends DrawingPanel{
     camAngleX = toRadians(angleX);
     camAngleY = toRadians(angleY);
     depth = width / (2 * Math.tan(toRadians(fieldOfView)/2));
-    dx = 15;
     g2.setPaint(Color.white);
     g2.fillRect(0, 0, 852, 480);
     frame.addKeyListener(new KeyListener(){
@@ -35,29 +38,29 @@ public class Render extends DrawingPanel{
       public void keyPressed(KeyEvent e){
         switch(e.getKeyChar()){
           case 'w':
-            xCam += Math.sin(camAngleX) * dx;
-            zCam += Math.cos(camAngleX) * dx;
+            xCam += sin(camAngleX) * dx;
+            zCam += cos(camAngleX) * dx;
             break;
           case 'a':
-            xCam += Math.sin(camAngleX - Math.PI / 2) * dx;
-            zCam += Math.cos(camAngleX - Math.PI / 2) * dx;
+            xCam += sin(camAngleX - Math.PI / 2) * dx;
+            zCam += cos(camAngleX - Math.PI / 2) * dx;
             break;
           case 's':
-            xCam += Math.sin(camAngleX + Math.PI) * dx;
-            zCam += Math.cos(camAngleX + Math.PI) * dx;
+            xCam += sin(camAngleX + Math.PI) * dx;
+            zCam += cos(camAngleX + Math.PI) * dx;
             break;
           case 'd':
-            xCam += Math.sin(camAngleX + Math.PI / 2) * dx;
-            zCam += Math.cos(camAngleX + Math.PI / 2) * dx;
+            xCam += sin(camAngleX + Math.PI / 2) * dx;
+            zCam += cos(camAngleX + Math.PI / 2) * dx;
             break;
         }
         
         switch(e.getKeyCode()){
           case KeyEvent.VK_UP:
-            addVerticalAngle(5);
+            addVerticalAngle(-5);
             break;
           case KeyEvent.VK_DOWN:
-            addVerticalAngle(-5);
+            addVerticalAngle(5);
             break;
           case KeyEvent.VK_LEFT:
             addHorizontalAngle(-5);
@@ -163,18 +166,15 @@ public class Render extends DrawingPanel{
     return radians * 180 / Math.PI;
   }
 
-  private double[] toRelative(double[] point){
+  public double[] toRelative(double[] point){
     double x = point[0] - xCam;
     double y = point[1] - yCam;
     double z = point[2] - zCam;
-    double r = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
-    double horizontalAngle = z >= 0 ? Math.atan(x / z) : Math.PI + Math.atan(x / z);
-    double verticalAngle = Math.asin(y / r);
-    horizontalAngle -= camAngleX;    
-    verticalAngle -= camAngleY;
-    z = r * Math.cos(verticalAngle) * Math.cos(horizontalAngle);
-    x = r * Math.cos(verticalAngle) * Math.sin(horizontalAngle);
-    y = r * Math.sin(verticalAngle);
-    return new double[] {x, y, z};
+
+    double x1 = cos(camAngleX) * (sin(camRoll) * y + cos(camRoll) * x) - sin(camAngleX) * z;
+    double y1 = sin(camAngleY) * (cos(camAngleX) * z + sin(camAngleX) * (sin(camRoll) * y + cos(camRoll) * x)) + cos(camAngleY) * (cos(camRoll) * y - sin(camRoll) * x);
+    double z1 = cos(camAngleY) * (cos(camAngleX) * z + sin(camAngleX) * (sin(camRoll) * y + cos(camRoll) * x)) - sin(camAngleY) * (cos(camRoll) * y - sin(camRoll) * x);
+
+    return new double[] {x1, y1, z1};
   }
 }
