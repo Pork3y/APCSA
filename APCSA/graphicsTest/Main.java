@@ -6,7 +6,6 @@ public class Main {
     	//construct DrawingPanel, and get its Graphics context
       Render r = new Render(90, 0, 0, new double[]{0, 0, 0});
       Graphics g = r.getGraphics();
-      g.setColor(new Color(255, 255, 255));
 
       double height = 100 * Math.sqrt(3) / 2;
 
@@ -20,24 +19,34 @@ public class Main {
       Tri t3 = new Tri(new Point3D[]{p1, p3, p4});
       Tri t4 = new Tri(new Point3D[]{p2, p3, p4});
 
+      Model m1 = new Model(new Tri[]{t1, t2, t3, t4});
+
 
       while(true){
-        r.drawPoint(new double[]{0, 0, 50});
+        /*r.drawPoint(new double[]{0, 0, 50});
         for(double i = 0; i < 5; i++){
           r.drawCube(-50, -150 + 100 * i, 250,
                       50, -50 + 100 * i, 350);
         }
         Thread.sleep(50);
         g.setColor(Color.WHITE);
-        g.fillRect(0, 0, 852, 480);
-
-        /*r.drawTri(t1);
-        r.drawTri(t2);
-        r.drawTri(t3);
-        r.drawTri(t4);
-        Thread.sleep(100);
-        g.setColor(Color.WHITE);
         g.fillRect(0, 0, 852, 480);*/
+
+        r.drawModel(m1);
+        Thread.sleep(10);
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, r.getWidth(), r.getHeight());
+
+          try {
+              // These coordinates are screen coordinates
+              int xCoord = 500;
+              int yCoord = 500;
+
+              // Move the cursor
+              Robot robot = new Robot();
+              robot.mouseMove(xCoord, yCoord);
+          } catch (AWTException e) {
+          }
       }
 
 	}

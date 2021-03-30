@@ -18,11 +18,11 @@ public class Render extends DrawingPanel{
   private double camRoll = 0;
   private double depth;
   final private double dx = 15;
-  final private int width = 852;
-  final private int height = 480;
+  final static private int width = 1920;
+  final static private int height = 1080;
 
   public Render(double fieldOfView, double angleX, double angleY, double[] camCoords){
-    super(852, 480);
+    super(width, height);
     xCam = camCoords[0];
     yCam = camCoords[1];
     zCam = camCoords[2];
@@ -74,6 +74,8 @@ public class Render extends DrawingPanel{
           case KeyEvent.VK_SHIFT:
             yCam -= 10;
             break;
+          case KeyEvent.VK_ESCAPE:
+
         }
       }
 
@@ -137,6 +139,13 @@ public class Render extends DrawingPanel{
   public void drawTri(Tri t){
     for(int i = 0; i <= 2; i++){
       drawLine(t.getPoint(i), t.getPoint(i + 1 == 3 ? 0 : i + 1));
+    }
+  }
+
+  public void drawModel(Model m){
+    Tri[] tris = m.getGeom();
+    for(int i = 0; i < tris.length; i++){
+      drawTri(tris[i]);
     }
   }
 
