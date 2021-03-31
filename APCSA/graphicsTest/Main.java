@@ -21,6 +21,7 @@ public class Main {
 
       Model m1 = new Model(new Tri[]{t1, t2, t3, t4});
 
+      r.environment.add(m1);
 
       while(true){
         /*r.drawPoint(new double[]{0, 0, 50});
@@ -32,10 +33,7 @@ public class Main {
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, 852, 480);*/
 
-        r.drawModel(m1);
-        Thread.sleep(10);
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, r.getWidth(), r.getHeight());
+          r.refresh();
 
           try {
               // These coordinates are screen coordinates
