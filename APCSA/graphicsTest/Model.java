@@ -11,4 +11,8 @@ public class Model {
     public Tri[] getGeom() {
         return geom;
     }
+
+    public void setGeom(Tri[] geom) {
+        this.geom = geom;
+    }
 }

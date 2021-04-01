@@ -1,4 +1,5 @@
 package graphicsTest;
+import java.awt.image.BufferedImage;
 import java.util.*;
 import java.io.*;
 import java.awt.*;
@@ -11,6 +12,7 @@ import static java.lang.Math.sin;
 
 public class Render extends DrawingPanel{
   public ArrayList<Model> environment = new ArrayList<>();
+  private MouseManager m = new MouseManager();
   private double xCam;
   private double yCam;
   private double zCam;
@@ -21,10 +23,7 @@ public class Render extends DrawingPanel{
   final private double dx = 15;
   final static private int width = 1920;
   final static private int height = 1080;
-  private boolean forwardMove;
-  private boolean leftMove;
-  private boolean rightMove;
-  private boolean backMove;
+  private boolean forwardMove, leftMove, rightMove, backMove, upMove, downMove;
 
   public Render(double fieldOfView, double angleX, double angleY, double[] camCoords){
     super(width, height);
@@ -36,12 +35,13 @@ public class Render extends DrawingPanel{
     depth = width / (2 * Math.tan(toRadians(fieldOfView)/2));
     g2.setPaint(Color.white);
     g2.fillRect(0, 0, 852, 480);
-    KeyListener k = new KeyListener(){
-      public void keyTyped(KeyEvent e){
+    KeyListener k = new KeyListener() {
+      public void keyTyped(KeyEvent e) {
 
       }
-      public void keyPressed(KeyEvent e){
-        switch(e.getKeyChar()){
+
+      public void keyPressed(KeyEvent e) {
+        switch (e.getKeyChar()) {
           case 'w':
             forwardMove = true;
             break;
@@ -56,36 +56,20 @@ public class Render extends DrawingPanel{
             break;
         }
 
-        switch(e.getKeyCode()){
-          case KeyEvent.VK_UP:
-            addVerticalAngle(-5);
-            boolean upLook = true;
-            break;
-          case KeyEvent.VK_DOWN:
-            addVerticalAngle(5);
-            boolean downLook = true;
-            break;
-          case KeyEvent.VK_LEFT:
-            addHorizontalAngle(-5);
-            boolean leftLook = true;
-            break;
-          case KeyEvent.VK_RIGHT:
-            addHorizontalAngle(5);
-            boolean rightLook = true;
-            break;
+        switch (e.getKeyCode()) {
           case KeyEvent.VK_SPACE:
-            yCam += 10;
+            upMove = true;
             break;
           case KeyEvent.VK_SHIFT:
-            yCam -= 10;
+            downMove = true;
             break;
           case KeyEvent.VK_ESCAPE:
             System.exit(0);
         }
       }
 
-      public void keyReleased(KeyEvent e){
-        switch(e.getKeyChar()){
+      public void keyReleased(KeyEvent e) {
+        switch (e.getKeyChar()) {
           case 'w':
             forwardMove = false;
             break;
@@ -93,20 +77,67 @@ public class Render extends DrawingPanel{
             leftMove = false;
             break;
           case 's':
-            rightMove = false;
+            backMove = false;
             break;
           case 'd':
-            backMove = false;
+            rightMove = false;
+            break;
+        }
+        switch (e.getKeyCode()) {
+          case KeyEvent.VK_SPACE:
+            upMove = false;
+            break;
+          case KeyEvent.VK_SHIFT:
+            downMove = false;
             break;
         }
       }
     };
 
     frame.addKeyListener(k);
+    frame.setCursor( frame.getToolkit().createCustomCursor(
+            new BufferedImage( 1, 1, BufferedImage.TYPE_INT_ARGB ),
+            new Point(),
+            null ) );
   }
 
   public Render(double fieldOfView, double[] camCoords){
     this(fieldOfView, 0, 0, camCoords);
+  }
+
+  public void refresh() throws InterruptedException{
+    m.run();
+    if(forwardMove) {
+      xCam += sin(camAngleX) * dx;
+      zCam += cos(camAngleX) * dx;
+    }
+    if(leftMove){
+      xCam += sin(camAngleX - Math.PI / 2) * dx;
+      zCam += cos(camAngleX - Math.PI / 2) * dx;
+    }
+    if(rightMove){
+      xCam += sin(camAngleX + Math.PI / 2) * dx;
+      zCam += cos(camAngleX + Math.PI / 2) * dx;
+    }
+    if(backMove){
+      xCam += sin(camAngleX + Math.PI) * dx;
+      zCam += cos(camAngleX + Math.PI) * dx;
+    }
+    if(upMove){
+      yCam += 10;
+    }
+    if(downMove){
+      yCam -= 10;
+    }
+    addHorizontalAngle(30 * Math.tan((m.mousePosX - width / 2) / depth));
+    addVerticalAngle(30 * Math.tan((m.mousePosY - height / 2) / depth));
+
+    for(int i = 0; i < environment.size(); i++){
+      drawModel(environment.get(i));
+    }
+    Thread.sleep(50);
+    g2.setPaint(Color.WHITE);
+    g2.fillRect(0, 0, getWidth(), getHeight());
   }
 
   public void addHorizontalAngle(double degrees){
@@ -168,31 +199,6 @@ public class Render extends DrawingPanel{
     for(int i = 0; i < tris.length; i++){
       drawTri(tris[i]);
     }
-  }
-
-  public void refresh() throws InterruptedException{
-    if(forwardMove) {
-      xCam += sin(camAngleX) * dx;
-      zCam += cos(camAngleX) * dx;
-    }
-    if(leftMove){
-      xCam += sin(camAngleX - Math.PI / 2) * dx;
-      zCam += cos(camAngleX - Math.PI / 2) * dx;
-    }
-    if(rightMove){
-      xCam += sin(camAngleX + Math.PI / 2) * dx;
-      zCam += cos(camAngleX + Math.PI / 2) * dx;
-  }
-    if(backMove){
-      xCam += sin(camAngleX + Math.PI) * dx;
-      zCam += cos(camAngleX + Math.PI) * dx;
-    }
-    for(int i = 0; i < environment.size(); i++){
-      drawModel(environment.get(i));
-    }
-    Thread.sleep(150);
-    g2.setPaint(Color.WHITE);
-    g2.fillRect(0, 0, getWidth(), getHeight());
   }
 
   @Deprecated

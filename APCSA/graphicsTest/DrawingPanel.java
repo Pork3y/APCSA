@@ -1,3 +1,4 @@
+package graphicsTest;
 /**
 The DrawingPanel class provides a simple interface for drawing persistent
 images using a Graphics object.  An internal BufferedImage object is used
@@ -26,7 +27,6 @@ Latest changes:
 - purple highlight (happy medium for both HW3/HW6)
 */
 
-package graphicsTest;
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
