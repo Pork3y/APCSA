@@ -1,7 +1,5 @@
 package graphicsTest;
 import java.awt.image.BufferedImage;
-import java.util.*;
-import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
@@ -20,10 +18,11 @@ public class Render extends DrawingPanel{
   private double camAngleY;
   private double camRoll = 0;
   private double depth;
-  final private double dx = 15;
+  final private double dx = 0.25;
   final static private int width = 1920;
   final static private int height = 1080;
   private boolean forwardMove, leftMove, rightMove, backMove, upMove, downMove;
+  final Color skyColor = new Color(148, 222, 255);
 
   public Render(double fieldOfView, double angleX, double angleY, double[] camCoords){
     super(width, height);
@@ -33,7 +32,7 @@ public class Render extends DrawingPanel{
     camAngleX = toRadians(angleX);
     camAngleY = toRadians(angleY);
     depth = width / (2 * Math.tan(toRadians(fieldOfView)/2));
-    g2.setPaint(Color.white);
+    g2.setPaint(skyColor);
     g2.fillRect(0, 0, 852, 480);
     KeyListener k = new KeyListener() {
       public void keyTyped(KeyEvent e) {
@@ -124,19 +123,19 @@ public class Render extends DrawingPanel{
       zCam += cos(camAngleX + Math.PI) * dx;
     }
     if(upMove){
-      yCam += 10;
+      yCam += 0.5;
     }
     if(downMove){
-      yCam -= 10;
+      yCam -= 0.5;
     }
-    addHorizontalAngle(30 * Math.tan((m.mousePosX - width / 2) / depth));
-    addVerticalAngle(30 * Math.tan((m.mousePosY - height / 2) / depth));
+    addHorizontalAngle(35 * Math.tan((m.mousePosX - width * 1.0 / 2) / depth));
+    addVerticalAngle(35 * Math.tan((m.mousePosY - height * 1.0 / 2) / depth));
 
-    for(int i = 0; i < environment.size(); i++){
-      drawModel(environment.get(i));
+    for(Model m : environment){
+      drawModel(m);
     }
     Thread.sleep(50);
-    g2.setPaint(Color.WHITE);
+    g2.setPaint(skyColor);
     g2.fillRect(0, 0, getWidth(), getHeight());
   }
 
@@ -162,7 +161,7 @@ public class Render extends DrawingPanel{
       int xProj = (int) Math.round(width * 1.0 / 2 + t * (point[0]));
       int yProj = (int) Math.round(height * 1.0 / 2 - t * (point[1]));
       g2.setPaint(Color.BLACK);
-      g2.fillRect(xProj, yProj, 1, 1);
+      //g2.fillRect(xProj, yProj, 1, 1);
       //System.out.println("" + xProj + " " + yProj);
       return new int[]{xProj, yProj};
     } else{
@@ -189,34 +188,30 @@ public class Render extends DrawingPanel{
   }
 
   public void drawTri(Tri t){
-    for(int i = 0; i <= 2; i++){
-      drawLine(t.getPoint(i), t.getPoint(i + 1 == 3 ? 0 : i + 1));
-    }
+    Point3D p13d = t.getPoint(0);
+    Point3D p23d = t.getPoint(1);
+    Point3D p33d = t.getPoint(2);
+
+    Vector v1 = new Vector(p13d, p23d);
+    Vector v2 = new Vector(p33d, p23d);
+    Vector normal = v1.crossProduct(v2);
+
+    int[] p1 = drawPoint(p13d);
+    int[] p2 = drawPoint(p23d);
+    int[] p3 = drawPoint(p33d);
+    Polygon p = new Polygon(new int[]{p1[0], p2[0], p3[0]}, new int[]{p1[1], p2[1], p3[1]}, 3);
+    double darken = (1 - Math.sin(normal.theta())) / 2;
+    int color = (int) (255 * darken);
+    if(color < 0) color = 0;
+    g2.setPaint(new Color(color, color, color));
+    g2.fill(p);
   }
 
   public void drawModel(Model m){
     Tri[] tris = m.getGeom();
-    for(int i = 0; i < tris.length; i++){
-      drawTri(tris[i]);
+    for(Tri t : tris){
+      drawTri(t);
     }
-  }
-
-  @Deprecated
-  public void drawCube(double x1, double y1, double z1, double x2, double y2, double z2){
-    drawLine(x1, y1, z1, x1, y2, z1);
-    drawLine(x1, y1, z1, x2, y1, z1);
-    drawLine(x2, y1, z1, x2, y2, z1);
-    drawLine(x1, y2, z1, x2, y2, z1);
-
-    drawLine(x1, y1, z1, x1, y1, z2);
-    drawLine(x2, y2, z2, x2, y2, z1);
-    drawLine(x1, y2, z1, x1, y2, z2);
-    drawLine(x2, y1, z1, x2, y1, z2);
-    
-    drawLine(x1, y1, z2, x1, y2, z2);
-    drawLine(x1, y1, z2, x2, y1, z2);
-    drawLine(x2, y2, z2, x2, y1, z2);
-    drawLine(x2, y2, z2, x1, y2, z2);
   }
 
   private double toRadians(double degrees){
