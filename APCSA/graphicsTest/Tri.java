@@ -27,4 +27,8 @@ public class Tri {
     public Point3D getPoint(int index){
         return vertices[index];
     }
+
+    public double relativeZ(Render r){
+        return 0;
+    }
 }

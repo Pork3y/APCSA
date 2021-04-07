@@ -2,8 +2,9 @@ package graphicsTest;
 
 public class Block extends Model{
 
-    int blockID;
+    //int blockID;
     //0: Dirt 1: Grass 2: Stone
+
     public Block(Point3D corner){
         super(new Tri[12]);
         Point3D p1 = corner;

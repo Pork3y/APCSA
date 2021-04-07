@@ -1,5 +1,8 @@
 package graphicsTest;
 
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 public class Point3D {
 
     final static Point3D ORIGIN = new Point3D(new double[]{0, 0, 0});
@@ -25,7 +28,6 @@ public class Point3D {
         double z = p.coords[2] - coords[2];
         return Math.sqrt(Math.pow(x,2) + Math.pow(y,2) + Math.pow(z,2));
     }
-
     public String toString(){
         return coords[0] + " " + coords[1] + " " + coords[2];
     }

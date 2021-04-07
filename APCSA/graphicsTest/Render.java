@@ -19,6 +19,7 @@ public class Render extends Frame{
   private double camRoll = 0;
   private double depth;
   private double dx = 0.25;
+  private double sensitivity = 80;
   final static private int width = 1920;
   final static private int height = 1080;
   private boolean forwardMove, leftMove, rightMove, backMove, upMove, downMove, fast;
@@ -134,8 +135,8 @@ public class Render extends Frame{
     if(downMove){
       yCam -= 0.5;
     }
-    addHorizontalAngle(35 * Math.tan((m.mousePosX - width * 1.0 / 2) / depth));
-    addVerticalAngle(35 * Math.tan((m.mousePosY - height * 1.0 / 2) / depth));
+    addHorizontalAngle(sensitivity * Math.tan((m.mousePosX - width * 1.0 / 2) / depth));
+    addVerticalAngle(sensitivity * Math.tan((m.mousePosY - height * 1.0 / 2) / depth));
 
     for(Model m : environment){
       drawModel(m);
@@ -200,12 +201,12 @@ public class Render extends Frame{
 
     Vector v1 = new Vector(p13d, p23d);
     Vector v2 = new Vector(p33d, p23d);
-    Vector normal = v1.crossProduct(v2);
+    Vector normal = v2.crossProduct(v1);
 
     int[] p1 = drawPoint(p13d);
     int[] p2 = drawPoint(p23d);
     int[] p3 = drawPoint(p33d);
-    double darken = (1 - Math.sin(normal.theta())) / 2;
+    double darken = (3 - Math.sin(normal.theta())) / 4;
     int color = (int) (255 * darken);
     if(color < 0) color = 0;
     g.setColor(new Color(color, color, color));

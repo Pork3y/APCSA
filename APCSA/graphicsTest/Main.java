@@ -13,7 +13,7 @@ public class Main {
       Point3D p1 = new Point3D(0, 0, 100);
       Point3D p2 = new Point3D(100, 0, 100);
       Point3D p3 = new Point3D(50, 0, 100 + height);
-      Point3D p4 = new Point3D(50, 200, 150);
+      Point3D p4 = new Point3D(50, 100 + height, 150);
 
       Tri t1 = new Tri(new Point3D[]{p1, p2, p3});
       Tri t2 = new Tri(new Point3D[]{p1, p2, p4});

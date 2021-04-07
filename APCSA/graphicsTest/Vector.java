@@ -38,4 +38,5 @@ public class Vector {
         double z1 = x * v.y - y * v.x;
         return new Vector(x1, y1, z1);
     }
+
 }
