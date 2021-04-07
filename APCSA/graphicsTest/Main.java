@@ -1,5 +1,8 @@
 package graphicsTest;
 
+import java.awt.*;
+import javax.swing.*;
+
 public class Main {
 	public static void main(String[] args) throws InterruptedException{
 
@@ -26,6 +29,7 @@ public class Main {
       while(true){
         r.refresh();
       }
+
 
 	}
 }

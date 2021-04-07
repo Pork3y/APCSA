@@ -19,6 +19,13 @@ public class Point3D {
         return coords;
     }
 
+    public double distanceTo(Point3D p){
+        double x = p.coords[0] - coords[0];
+        double y = p.coords[1] - coords[1];
+        double z = p.coords[2] - coords[2];
+        return Math.sqrt(Math.pow(x,2) + Math.pow(y,2) + Math.pow(z,2));
+    }
+
     public String toString(){
         return coords[0] + " " + coords[1] + " " + coords[2];
     }
