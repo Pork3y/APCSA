@@ -112,6 +112,16 @@ public class Render extends Frame{
   }
 
   public void refresh() throws InterruptedException{
+    for(int i = 1; i < environment.size(); i++){
+      int j = i;
+      Model m = environment.get(i);
+      double dist = toRelative(m.center().coords)[2];
+      while(j != 0 && dist > toRelative(environment.get(j-1).center().coords)[2]){
+        environment.set(j, environment.get(j - 1));
+        j--;
+      }
+      environment.set(j, m);
+    }
     m.run();
     if(forwardMove) {
       xCam += sin(camAngleX) * dx;
@@ -203,14 +213,20 @@ public class Render extends Frame{
     Vector v2 = new Vector(p33d, p23d);
     Vector normal = v2.crossProduct(v1);
 
-    int[] p1 = drawPoint(p13d);
-    int[] p2 = drawPoint(p23d);
-    int[] p3 = drawPoint(p33d);
-    double darken = (3 - Math.sin(normal.theta())) / 4;
-    int color = (int) (255 * darken);
-    if(color < 0) color = 0;
-    g.setColor(new Color(color, color, color));
-    g.fillPolygon(new int[]{p1[0], p2[0], p3[0]}, new int[]{p1[1], p2[1], p3[1]}, 3);
+    Point3D np = new Point3D(xCam + normal.x, yCam + normal.y, zCam + normal.z);
+    if(toRelative(np)[2] <= 0) {
+      Point3D cent = t.center();
+
+      int[] p1 = drawPoint(p13d);
+      int[] p2 = drawPoint(p23d);
+      int[] p3 = drawPoint(p33d);
+      double darken = (3 - Math.sin(normal.theta())) / 4;
+      int color = (int) (255 * darken);
+      if (color < 0) color = 0;
+      g.setColor(new Color(color, color, color));
+      g.fillPolygon(new int[]{p1[0], p2[0], p3[0]}, new int[]{p1[1], p2[1], p3[1]}, 3);
+      drawLine(cent, new Point3D(cent.coords[0] + normal.x, cent.coords[1] + normal.y, cent.coords[2] + normal.z));
+    }
   }
 
   public void drawModel(Model m){
@@ -249,5 +265,10 @@ public class Render extends Frame{
     double z1 = cos(camAngleY) * (cos(camAngleX) * z + sin(camAngleX) * (sin(camRoll) * y + cos(camRoll) * x)) - sin(camAngleY) * (cos(camRoll) * y - sin(camRoll) * x);
 
     return new double[] {x1, y1, z1};
+  }
+
+
+  public double[] toRelative(Point3D point){
+    return toRelative(point.coords);
   }
 }

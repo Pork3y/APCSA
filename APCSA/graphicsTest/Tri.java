@@ -3,6 +3,7 @@ package graphicsTest;
 public class Tri {
 
     Point3D[] vertices;
+    //Must be clockwise oriented when viewed from outside the object
 
     public Tri(Point3D[] vertices){
         this.vertices = vertices;
@@ -28,7 +29,4 @@ public class Tri {
         return vertices[index];
     }
 
-    public double relativeZ(Render r){
-        return 0;
-    }
 }

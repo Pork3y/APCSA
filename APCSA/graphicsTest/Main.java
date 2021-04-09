@@ -16,15 +16,17 @@ public class Main {
       Point3D p4 = new Point3D(50, 100 + height, 150);
 
       Tri t1 = new Tri(new Point3D[]{p1, p2, p3});
-      Tri t2 = new Tri(new Point3D[]{p1, p2, p4});
-      Tri t3 = new Tri(new Point3D[]{p1, p3, p4});
-      Tri t4 = new Tri(new Point3D[]{p2, p3, p4});
+      Tri t2 = new Tri(new Point3D[]{p1, p4, p2});
+      Tri t3 = new Tri(new Point3D[]{p1, p4, p3});
+      Tri t4 = new Tri(new Point3D[]{p2, p4, p3});
 
       Model m1 = new Model(new Tri[]{t1, t2, t3, t4});
       r.environment.add(m1);
 
-      Block b1 = new Block(Point3D.ORIGIN);
-      r.environment.add(b1);
+      for(int i = 0; i < 10; i++) {
+            Block b1 = new Block(new Point3D(0, 0, 1 + i));
+            r.environment.add(b1);
+      }
 
       while(true){
         r.refresh();

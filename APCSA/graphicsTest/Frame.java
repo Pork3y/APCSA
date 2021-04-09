@@ -21,7 +21,4 @@ public class Frame extends JFrame{
         g = canvas.getGraphics();
     }
 
-    public void paint(Graphics g){
-        g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-    }
 }
