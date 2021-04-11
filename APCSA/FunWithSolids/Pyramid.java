@@ -1,4 +1,4 @@
-package funWithSolids;
+package FunWithSolids;
 
 import java.lang.Math;
 

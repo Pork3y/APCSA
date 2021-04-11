@@ -1,4 +1,4 @@
-package graphicsTest;
+package GraphicsTest;
 
 public class Block extends Model{
 

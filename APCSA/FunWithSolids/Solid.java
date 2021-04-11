@@ -1,4 +1,4 @@
-package funWithSolids;
+package FunWithSolids;
 
 public class Solid {
 	private String myName;

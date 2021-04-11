@@ -1,6 +1,4 @@
-package graphicsTest;
-
-import java.awt.*;
+package GraphicsTest;
 
 public class Vector {
 
@@ -15,9 +13,9 @@ public class Vector {
     }
 
     public Vector(Point3D p1, Point3D p2){
-        x = p2.coords[0] - p1.coords[0];
-        y = p2.coords[1] - p1.coords[1];
-        z = p2.coords[2] - p1.coords[2];
+        x = p2.x() - p1.x();
+        y = p2.y() - p1.y();
+        z = p2.z() - p1.z();
     }
 
     public double magnitude(){
@@ -25,11 +23,12 @@ public class Vector {
     }
 
     public double theta(){
-        return Math.atan(z / x);
+        if(x == 0) return z / Math.abs(z) * Math.PI + Math.PI;
+        return x > 0 ? Math.atan(z / x) : Math.PI + Math.atan(z / x);
     }
 
     public double phi(){
-        return Math.acos(y / magnitude());
+        return Math.asin(y / magnitude());
     }
 
     public Vector crossProduct(Vector v){
@@ -39,4 +38,11 @@ public class Vector {
         return new Vector(x1, y1, z1);
     }
 
+    public double dotProduct(Vector v){
+        return x * v.x + y * v.y + z * v.z;
+    }
+
+    public Point3D asPoint(){
+        return new Point3D(x, y, z);
+    }
 }

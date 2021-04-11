@@ -1,4 +1,4 @@
-package funWithSolids;
+package FunWithSolids;
 
 public class RectangularPrism extends Solid {
 

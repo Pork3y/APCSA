@@ -1,9 +1,9 @@
-package graphicsTest;
+package GraphicsTest;
 
 public class Tri {
 
     Point3D[] vertices;
-    //Must be clockwise oriented when viewed from outside the object
+    //Must be clockwise oriented when viewed from outside the object for surface normal to be calculated correctly
 
     public Tri(Point3D[] vertices){
         this.vertices = vertices;

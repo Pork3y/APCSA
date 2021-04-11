@@ -1,7 +1,4 @@
-package graphicsTest;
-
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
+package GraphicsTest;
 
 public class Point3D {
 
@@ -16,10 +13,23 @@ public class Point3D {
         coords[0] = x;
         coords[1] = y;
         coords[2] = z;
+
     }
 
     public double[] getCoords() {
         return coords;
+    }
+
+    public double x(){
+        return coords[0];
+    }
+
+    public double y(){
+        return coords[1];
+    }
+
+    public double z(){
+        return coords[2];
     }
 
     public double distanceTo(Point3D p){
