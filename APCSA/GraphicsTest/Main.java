@@ -23,9 +23,9 @@ public class Main {
       Model m1 = new Model(new Tri[]{t1, t2, t3, t4});
       r.environment.add(m1);
 
-          for(int i = 0; i < 10; i++){
-                for(int j = 0; j < 10; j++) {
-                      for(int k = 0; k < 10; k++) {
+          for(int i = 0; i < 5; i++){
+                for(int j = 0; j < 5; j++) {
+                      for(int k = 0; k < 5; k++) {
                             Block b1 = new Block(new Point3D(0 + 2 * i, 0 + 2 * k, 0 + 2 * j));
                             r.environment.add(b1);
                       }

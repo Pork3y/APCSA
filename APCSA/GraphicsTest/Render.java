@@ -138,7 +138,7 @@ public class Render extends Frame{
       int j = i;
       Model m = environment.get(i);
       double dist = m.center().distanceTo(cam);
-      while(j != 0 && dist > m.center().distanceTo(cam)){
+      while(j != 0 && dist > environment.get(j - 1).center().distanceTo(cam)){
         environment.set(j, environment.get(j - 1));
         j--;
       }
@@ -170,8 +170,7 @@ public class Render extends Frame{
     addHorizontalAngle(sensitivity * Math.tan((m.mousePosX - width * 1.0 / 2) / depth));
     addVerticalAngle(sensitivity * Math.tan((m.mousePosY - height * 1.0 / 2) / depth));
 
-    for(int i = environment.size() - 1; i >= 0; i--){
-      Model m = environment.get(i);
+    for(Model m : environment){
       drawModel(m);
     }
 
@@ -306,7 +305,7 @@ public class Render extends Frame{
       int j = i;
       Tri t = tris[i];
       double dist = t.center().distanceTo(cam);
-      while(j != 0 && dist > t.center().distanceTo(cam)){
+      while(j != 0 && dist > tris[j-1].center().distanceTo(cam)){
         tris[j] = tris[j-1];
         j--;
       }
