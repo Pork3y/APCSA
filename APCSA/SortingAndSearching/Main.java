@@ -4,7 +4,7 @@ class Main {
   public static void main(String[] args) {
 
     Stopwatch timer = new Stopwatch();
-    int[] arr = ArrayUtils.generateRandom(1000000, 100);
+    int[] arr = ArrayUtils.generateRandom(20, 10);
     ArrayUtils.printArray(arr);
     System.out.println();
     timer.start();

@@ -32,4 +32,22 @@ public class Block extends Model{
 
         setGeom(new Tri[]{t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12});
     }
+
+    public void removeFace(int face){
+        for(int i = 0; i < geom.size(); i++){
+            int num = (i + 2) / 2;
+            if(num == face){
+                geom.set(i, null);
+            }
+        }
+    }
+
+    public void cleanse(){
+        for(int i = 0; i < geom.size(); i++){
+            if(geom.get(i) == null){
+                geom.remove(i);
+                i--;
+            }
+        }
+    }
 }

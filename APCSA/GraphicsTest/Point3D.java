@@ -32,13 +32,29 @@ public class Point3D {
         return coords[2];
     }
 
+    public void moveX(double dist){
+        coords[0] += dist;
+    }
+
+    public void moveY(double dist){
+        coords[1] += dist;
+    }
+
+    public void moveZ(double dist){
+        coords[2] += dist;
+    }
+
     public double distanceTo(Point3D p){
-        double x = p.coords[0] - coords[0];
-        double y = p.coords[1] - coords[1];
-        double z = p.coords[2] - coords[2];
+        double x = p.x() - x();
+        double y = p.y() - y();
+        double z = p.z() - z();
         return Math.sqrt(Math.pow(x,2) + Math.pow(y,2) + Math.pow(z,2));
     }
     public String toString(){
         return coords[0] + " " + coords[1] + " " + coords[2];
+    }
+
+    public boolean equals(Point3D p){
+        return (x() == p.x() && y() == p.y() && z() == p.z());
     }
 }

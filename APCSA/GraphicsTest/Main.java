@@ -21,20 +21,20 @@ public class Main {
       Tri t4 = new Tri(new Point3D[]{p2, p4, p3});
 
       Model m1 = new Model(new Tri[]{t1, t2, t3, t4});
-      r.environment.add(m1);
 
-          for(int i = 0; i < 5; i++){
-                for(int j = 0; j < 5; j++) {
-                      for(int k = 0; k < 5; k++) {
-                            Block b1 = new Block(new Point3D(0 + 2 * i, 0 + 2 * k, 0 + 2 * j));
-                            r.environment.add(b1);
-                      }
-                }
-          }
+      for(int i = 0; i < 5; i++){
+            for(int j = 0; j < 5; j++){
+                  for(int k = 0; k < 5; k++) {
+                        r.environment.add(new Block(new Point3D(2 * i, 2 * j, 2 * k)));
+                  }
+            }
+      }
 
-          Block light = new Block(new Point3D(-4.5, 14.5, -4.5));
+          //b1.add(m1);
 
-          r.environment.add(light);
+      //Chunk c1 = new Chunk(Point3D.ORIGIN);
+      //r.environment.add(c1.getMesh());
+
 
       while(true){
         r.refresh();
