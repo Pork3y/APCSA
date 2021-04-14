@@ -331,10 +331,9 @@ public class Render extends Frame{
 
         Vector lightDist = new Vector(cent.x() - light.x(), cent.y() - light.y(), cent.z() - light.z());
         double dist = light.distanceTo(cent);
-        double darken = Math.pow(((-normal.dotProduct(lightDist) / (normal.magnitude() * lightDist.magnitude()) + 1)/ Math.pow(dist, 2)), 1.0 / 3);
+        double darken = Math.pow(((-normal.dotProduct(lightDist) / (normal.magnitude() * lightDist.magnitude()) + 1)/ Math.pow(dist, 2)), 1.0 / 4);
 
         int color = (int) (255 * darken);
-        //if (color == 0) color = Math.max((int) (900 / Math.pow(dist, 2)), 20);
         color = Math.max(0, color);
         color = Math.min(255, color);
         buffer.setColor(new Color(color, color, color));
