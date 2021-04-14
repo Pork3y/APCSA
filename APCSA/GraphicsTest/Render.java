@@ -101,6 +101,12 @@ public class Render extends Frame{
           case KeyEvent.VK_RIGHT:
             light.moveX(0.25);
             break;
+          case KeyEvent.VK_NUMPAD8:
+            light.moveZ(0.25);
+            break;
+          case KeyEvent.VK_NUMPAD2:
+            light.moveZ(-0.25);
+            break;
           case KeyEvent.VK_ESCAPE:
             System.exit(0);
           case KeyEvent.VK_CONTROL:
@@ -306,39 +312,42 @@ public class Render extends Frame{
   }
 
   public void drawTri(Tri t){
-    Point3D p13d = t.getPoint(0);
-    Point3D p23d = t.getPoint(1);
-    Point3D p33d = t.getPoint(2);
+    if(toRelative(t.center()).z() > 0) {
+      Point3D p13d = t.getPoint(0);
+      Point3D p23d = t.getPoint(1);
+      Point3D p33d = t.getPoint(2);
 
-    if(p13d.equals(p23d) || p13d.equals(p33d) || p23d.equals(p33d)) return;
+      if (p13d.equals(p23d) || p13d.equals(p33d) || p23d.equals(p33d)) return;
 
-    Vector v1 = new Vector(p13d, p23d);
-    Vector v2 = new Vector(p33d, p23d);
-    Vector normal = v2.crossProduct(v1);
+      Vector v1 = new Vector(p13d, p23d);
+      Vector v2 = new Vector(p33d, p23d);
+      Vector normal = v2.crossProduct(v1);
 
-    Point3D cent = t.center();
-    if(normal.dotProduct(new Vector(cent.x() - xCam, cent.y() - yCam, cent.z() - zCam)) <= 0) {
-      int[] p1 = drawPoint(p13d);
-      int[] p2 = drawPoint(p23d);
-      int[] p3 = drawPoint(p33d);
+      Point3D cent = t.center();
+      if (normal.dotProduct(new Vector(cent.x() - xCam, cent.y() - yCam, cent.z() - zCam)) <= 0) {
+        int[] p1 = drawPoint(p13d);
+        int[] p2 = drawPoint(p23d);
+        int[] p3 = drawPoint(p33d);
 
-      Vector lightDist = new Vector(cent.x() - light.x(), cent.y() - light.y(), cent.z() - light.z());
-      double dist = light.distanceTo(cent);
-      double darken = Math.pow((-normal.dotProduct(lightDist) / (normal.magnitude() * lightDist.magnitude()) / Math.pow(dist, 2)), 1.0 / 8);
+        Vector lightDist = new Vector(cent.x() - light.x(), cent.y() - light.y(), cent.z() - light.z());
+        double dist = light.distanceTo(cent);
+        double darken = Math.pow(((-normal.dotProduct(lightDist) / (normal.magnitude() * lightDist.magnitude()) + 1)/ Math.pow(dist, 2)), 1.0 / 3);
 
-      int color = (int) (255 * darken);
-      if(color == 0) color = Math.max((int) (900 / Math.pow(dist, 2)), 20);
-      color = Math.min(255, color);
-      buffer.setColor(new Color(color, color, color));
-      //buffer.setColor(Color.GRAY);
-      //if(normal.theta() == 0) buffer.setColor(Color.LIGHT_GRAY);
-      //if(normal.theta() == 180) buffer.setColor(Color.DARK_GRAY);
+        int color = (int) (255 * darken);
+        //if (color == 0) color = Math.max((int) (900 / Math.pow(dist, 2)), 20);
+        color = Math.max(0, color);
+        color = Math.min(255, color);
+        buffer.setColor(new Color(color, color, color));
+        //buffer.setColor(Color.GRAY);
+        //if(normal.theta() == 0) buffer.setColor(Color.LIGHT_GRAY);
+        //if(normal.theta() == Math.PI / 2) buffer.setColor(Color.DARK_GRAY);
 
-      buffer.fillPolygon(new int[]{p1[0], p2[0], p3[0]}, new int[]{p1[1], p2[1], p3[1]}, 3);
-      if(debug){
-        drawLine(cent, new Point3D(cent.x() + normal.x, cent.y() + normal.y, cent.z() + normal.z));
-        buffer.setColor(Color.GREEN);
-        buffer.drawString("" + color, p1[0], p1[1]);
+        buffer.fillPolygon(new int[]{p1[0], p2[0], p3[0]}, new int[]{p1[1], p2[1], p3[1]}, 3);
+        if (debug) {
+          drawLine(cent, new Point3D(cent.x() + normal.x, cent.y() + normal.y, cent.z() + normal.z));
+          buffer.setColor(Color.GREEN);
+          buffer.drawString("" + color, p1[0], p1[1]);
+        }
       }
     }
   }
