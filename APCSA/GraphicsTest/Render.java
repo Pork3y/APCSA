@@ -161,7 +161,7 @@ public class Render extends Frame{
     this(fieldOfView, 0, 0, camCoords);
   }
 
-  public void refresh() throws InterruptedException{
+  public void refresh(){
     if(debug) timer.start();
     Point3D cam = new Point3D(xCam, yCam, zCam);
     //sort(environment, 0, environment.size() - 1);
