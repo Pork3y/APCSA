@@ -30,6 +30,7 @@ public class Render extends Frame{
   final private double sensitivity = 80;
   final static private int width = 1920;
   final static private int height = 1080;
+  private Pixel[][] zBuffer = new Pixel[height][width];
   private boolean forwardMove, leftMove, rightMove, backMove, upMove, downMove;
   private boolean debug = false;
   private int count = 0;
@@ -40,6 +41,11 @@ public class Render extends Frame{
 
   public Render(double fieldOfView, double angleX, double angleY, double[] camCoords) throws FontFormatException, IOException, AWTException {
     super(width, height);
+    for(int i = 0; i < width; i++){
+      for(int j = 0; j < height; j++){
+        zBuffer[j][i] = new Pixel();
+      }
+    }
     xCam = camCoords[0];
     yCam = camCoords[1];
     zCam = camCoords[2];
@@ -48,14 +54,14 @@ public class Render extends Frame{
     camAngleX = toRadians(angleX);
     camAngleY = toRadians(angleY);
     depth = width / (2 * Math.tan(toRadians(fieldOfView)/2));
-    final Font f = Font.createFont(Font.TRUETYPE_FONT, new File(new File(System.getProperty("user.dir")), "APCSA/GraphicsTest/Minecraft.ttf")).deriveFont(Font.PLAIN, 24);
+    final Font f = Font.createFont(Font.TRUETYPE_FONT, new File("APCSA/GraphicsTest/Minecraft.ttf")).deriveFont(Font.PLAIN, 24);
     GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     ge.registerFont(f);
     buffer.setFont(f);
     buffer.setColor(Color.BLACK);
     buffer.fillRect(0, 0, width, height);
     buffer.setColor(Color.WHITE);
-    buffer.drawString("Loading...", height / 2, width / 2 - 30);
+    buffer.drawString("Loading...", width / 2, height / 2);
     g.drawImage(nextFrame, 0, 0, this);
     MouseWheelListener m = e -> {
       int num = e.getWheelRotation();
