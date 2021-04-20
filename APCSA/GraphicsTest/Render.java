@@ -14,7 +14,10 @@ import static java.lang.Math.sin;
 
 public class Render extends Frame{
   public ArrayList<Model> environment = new ArrayList<>();
-  final private BufferedImage nextFrame = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_RGB);
+  final static Dimension d = Toolkit. getDefaultToolkit(). getScreenSize();
+  final static public int width = (int) d.getWidth();
+  final static public int height = (int) d.getHeight();
+  final private BufferedImage nextFrame = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
   final private Graphics buffer = nextFrame.getGraphics();
   final private MouseManager m = new MouseManager();
   private double xCam;
@@ -28,8 +31,6 @@ public class Render extends Frame{
   private double depth;
   private double dx = 0.15;
   final private double sensitivity = 80;
-  final static private int width = 1920;
-  final static private int height = 1080;
   private Pixel[][] zBuffer = new Pixel[height][width];
   private boolean forwardMove, leftMove, rightMove, backMove, upMove, downMove;
   private boolean debug = false;
@@ -39,7 +40,7 @@ public class Render extends Frame{
   Stopwatch timer = new Stopwatch();
   final Color skyColor = new Color(148, 222, 255);
 
-  public Render(double fieldOfView, double angleX, double angleY, double[] camCoords) throws FontFormatException, IOException, AWTException {
+  public Render(double fieldOfView, double angleX, double angleY, double[] camCoords) throws FontFormatException, IOException, AWTException, InterruptedException {
     super(width, height);
     for(int i = 0; i < width; i++){
       for(int j = 0; j < height; j++){
@@ -163,7 +164,7 @@ public class Render extends Frame{
             null ) );
   }
 
-  public Render(double fieldOfView, double[] camCoords) throws FontFormatException, IOException, AWTException {
+  public Render(double fieldOfView, double[] camCoords) throws FontFormatException, IOException, AWTException, InterruptedException {
     this(fieldOfView, 0, 0, camCoords);
   }
 
@@ -262,6 +263,7 @@ public class Render extends Frame{
     zCam = camCoords[2];
   }
 
+  @Deprecated
   private void sort(ArrayList<Model> arr, int first, int last){
     if(first < last){
       int p = partition(arr, first, last);
@@ -270,7 +272,8 @@ public class Render extends Frame{
     }
   }
 
-  private int partition(ArrayList<Model> arr, int first, int last){
+  @Deprecated
+  private int partition(Model m, int first, int last){
     Point3D cam = new Point3D(xCam, yCam, zCam);
     double pivot = arr.get(last).center().distanceTo(cam);
     int i = first - 1;
@@ -301,13 +304,6 @@ public class Render extends Frame{
     } else{
       return new int[]{-1, -1};
     }
-  }
-
-  public void drawLine(double x1, double y1, double z1, double x2, double y2, double z2){
-    int[] p1 = drawPoint(new Point3D(x1, y1, z1));
-    int[] p2 = drawPoint(new Point3D(x2, y2, z2));
-    buffer.setColor(Color.BLACK);
-    if((p1[0] != -1 && p1[1] != -1) && (p2[0] != -1 && p2[1] != -1)) buffer.drawLine(p1[0], p1[1], p2[0], p2[1]);
   }
 
   public void drawLine(Point3D p13d, Point3D p23d){
@@ -360,16 +356,17 @@ public class Render extends Frame{
   public void drawModel(Model m){
     Tri[] tris = m.getGeom();
     Point3D cam = Point3D.ORIGIN;
-    for(int i = 1; i < tris.length; i++){
-      int j = i;
-      Tri t = tris[i];
-      double dist = (toRelative(t.center()).distanceTo(cam));
-      while(j != 0 && dist > toRelative(tris[j-1].center()).distanceTo(cam)){
-        tris[j] = tris[j-1];
-        j--;
-      }
-      tris[j] = t;
-    }
+//    for(int i = 1; i < tris.length; i++){
+//      int j = i;
+//      Tri t = tris[i];
+//      double dist = (toRelative(t.center()).distanceTo(cam));
+//      while(j != 0 && dist > toRelative(tris[j-1].center()).distanceTo(cam)){
+//        tris[j] = tris[j-1];
+//        j--;
+//      }
+//      tris[j] = t;
+//    }
+
     for(Tri tri : tris){
       drawTri(tri);
     }
