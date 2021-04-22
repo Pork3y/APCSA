@@ -42,6 +42,10 @@ public class Vector {
         return x * v.x + y * v.y + z * v.z;
     }
 
+    public Vector asUnit(){
+        return new Vector(x / magnitude(), y / magnitude(), z / magnitude());
+    }
+
     public Point3D asPoint(){
         return new Point3D(x, y, z);
     }

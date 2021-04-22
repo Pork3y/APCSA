@@ -35,12 +35,14 @@ public class Main {
       Chunk c1 = new Chunk(Point3D.ORIGIN);
       r.environment.add(c1.getMesh());
 
+
 //      Chunk c2 = new Chunk(new Point3D(0, 0, 16));
 //      r.environment.add(c2.getMesh());
 
 
       while(true){
         r.refresh();
+        r.drawRasterizedTri(t1);
       }
 
 

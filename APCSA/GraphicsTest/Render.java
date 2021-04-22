@@ -352,6 +352,24 @@ public class Render extends Frame{
     }
   }
 
+  public void drawRasterizedTri(Tri t){
+    Point3D p13d = toRelative(t.getPoint(0));
+    Point3D p23d = toRelative(t.getPoint(1));
+    Point3D p33d = toRelative(t.getPoint(2));
+
+    if (p13d.equals(p23d) || p13d.equals(p33d) || p23d.equals(p33d)) return;
+
+    Vector v1 = new Vector(p13d, p23d);
+    Vector v2 = new Vector(p33d, p23d);
+    Vector normal = (v2.crossProduct(v1)).asUnit();
+
+    Point3D cent = toRelative(t.center());
+
+    if (normal.dotProduct(new Vector(cent.x(), cent.y(), cent.z())) < 0) return;
+
+
+  }
+
   public void drawModel(Model m){
     Tri[] tris = m.getGeom();
 //    Point3D cam = Point3D.ORIGIN;
