@@ -22,18 +22,21 @@ public class Main {
 
       Model m1 = new Model(new Tri[]{t1, t2, t3, t4});
 
-       for(int i = 0; i < 5; i++){
-             for(int j = 0; j < 5; j++){
-                   for(int k = 0; k < 5; k++) {
-                         r.environment.add(new Block(new Point3D(2 * i, 2 * j, 2 * k)));
-                   }
-             }
-       }
+//       for(int i = 0; i < 5; i++){
+//             for(int j = 0; j < 5; j++){
+//                   for(int k = 0; k < 5; k++) {
+//                         r.environment.add(new Block(new Point3D(2 * i, 2 * j, 2 * k)));
+//                   }
+//             }
+//       }
 
           //b1.add(m1);
 
-      //Chunk c1 = new Chunk(Point3D.ORIGIN);
-      //r.environment.add(c1.getMesh());
+      Chunk c1 = new Chunk(Point3D.ORIGIN);
+      r.environment.add(c1.getMesh());
+
+//      Chunk c2 = new Chunk(new Point3D(0, 0, 16));
+//      r.environment.add(c2.getMesh());
 
 
       while(true){

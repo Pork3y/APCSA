@@ -263,29 +263,27 @@ public class Render extends Frame{
     zCam = camCoords[2];
   }
 
-  @Deprecated
-  private void sort(ArrayList<Model> arr, int first, int last){
+  private void sort(Model m, int first, int last){
     if(first < last){
-      int p = partition(arr, first, last);
-      sort(arr, first, p - 1);
-      sort(arr, p + 1, last);
+      int p = partition(m, first, last);
+      sort(m, first, p - 1);
+      sort(m, p + 1, last);
     }
   }
 
-  @Deprecated
   private int partition(Model m, int first, int last){
     Point3D cam = new Point3D(xCam, yCam, zCam);
-    double pivot = arr.get(last).center().distanceTo(cam);
+    double pivot = m.geom.get(last).center().distanceTo(cam);
     int i = first - 1;
     for(int j = first; j <= last; j++){
-      if(arr.get(j).center().distanceTo(cam) < pivot){
+      if(m.geom.get(j).center().distanceTo(cam) < pivot){
         i++;
-        Model m = arr.set(i, arr.get(j));
-        arr.set(j, m);
+        Tri t = m.geom.set(i, m.geom.get(j));
+        m.geom.set(j, t);
       }
     }
-    Model m = arr.set(i + 1, arr.get(last));
-    arr.set(last, m);
+    Tri t = m.geom.set(i + 1, m.geom.get(last));
+    m.geom.set(last, t);
     return i + 1;
   }
 
@@ -330,6 +328,7 @@ public class Render extends Frame{
         int[] p1 = drawPoint(p13d);
         int[] p2 = drawPoint(p23d);
         int[] p3 = drawPoint(p33d);
+        if(p1[0] == -1 || p2[0] == -1 || p3[0] == -1) return;
 
         Vector lightDist = new Vector(cent.x() - light.x(), cent.y() - light.y(), cent.z() - light.z());
         double dist = light.distanceTo(cent);
@@ -355,7 +354,7 @@ public class Render extends Frame{
 
   public void drawModel(Model m){
     Tri[] tris = m.getGeom();
-    Point3D cam = Point3D.ORIGIN;
+//    Point3D cam = Point3D.ORIGIN;
 //    for(int i = 1; i < tris.length; i++){
 //      int j = i;
 //      Tri t = tris[i];
@@ -366,6 +365,8 @@ public class Render extends Frame{
 //      }
 //      tris[j] = t;
 //    }
+
+    sort(m, 0, m.geom.size() - 1);
 
     for(Tri tri : tris){
       drawTri(tri);
