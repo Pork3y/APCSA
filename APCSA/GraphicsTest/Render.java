@@ -1,5 +1,4 @@
 package GraphicsTest;
-import SortingAndSearching.ArrayUtils;
 
 import java.awt.image.BufferedImage;
 import java.awt.*;
@@ -7,22 +6,18 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 public class Render extends Frame{
   public ArrayList<Model> environment = new ArrayList<>();
-  final static Dimension d = Toolkit. getDefaultToolkit(). getScreenSize();
-  final static public int width = (int) d.getWidth();
-  final static public int height = (int) d.getHeight();
-  final private BufferedImage nextFrame = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-  final private Graphics buffer = nextFrame.getGraphics();
+  final public BufferedImage nextFrame = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+  final public Graphics buffer = nextFrame.getGraphics();
   final private MouseManager m = new MouseManager();
-  private double xCam;
-  private double yCam;
-  private double zCam;
+  public double xCam;
+  public double yCam;
+  public double zCam;
   private double fieldOfView;
   private double baseFieldOfView;
   private double camAngleX;
@@ -31,16 +26,16 @@ public class Render extends Frame{
   private double depth;
   private double dx = 0.15;
   final private double sensitivity = 80;
-  private Pixel[][] zBuffer = new Pixel[height][width];
+  public Pixel[][] zBuffer = new Pixel[height][width];
   private boolean forwardMove, leftMove, rightMove, backMove, upMove, downMove;
   private boolean debug = false;
   private int count = 0;
   private double FPS;
-  private Point3D light = new Point3D(-2, 5.5, -2);
+  public Point3D light = new Point3D(-2, 5.5, -2);
   Stopwatch timer = new Stopwatch();
   final Color skyColor = new Color(148, 222, 255);
 
-  public Render(double fieldOfView, double angleX, double angleY, double[] camCoords) throws FontFormatException, IOException, AWTException, InterruptedException {
+  public Render(double fieldOfView, double angleX, double angleY, double[] camCoords) throws FontFormatException, IOException, AWTException {
     super(width, height);
     for(int i = 0; i < width; i++){
       for(int j = 0; j < height; j++){
@@ -287,7 +282,7 @@ public class Render extends Frame{
     return i + 1;
   }
 
-  public int[] drawPoint(Point3D p){
+  public Point projectPoint(Point3D p){
     Point3D p1 = toRelative(p);
     double[] point = p1.coords;
 
@@ -298,17 +293,17 @@ public class Render extends Frame{
       int yProj = (int) Math.round(height * 1.0 / 2 - t * (point[1]));
       buffer.setColor(Color.BLACK);
       //g2.fillRect(xProj, yProj, 1, 1);
-      return new int[]{xProj, yProj};
+      return new Point(xProj, yProj);
     } else{
-      return new int[]{-1, -1};
+      return new Point(-1, -1);
     }
   }
 
   public void drawLine(Point3D p13d, Point3D p23d){
-    int[] p1 = drawPoint(p13d);
-    int[] p2 = drawPoint(p23d);
+    Point p1 = projectPoint(p13d);
+    Point p2 = projectPoint(p23d);
     buffer.setColor(Color.BLACK);
-    if((p1[0] != -1 && p1[1] != -1) && (p2[0] != -1 && p2[1] != -1)) buffer.drawLine(p1[0], p1[1], p2[0], p2[1]);
+    if((p1.x != -1 && p1.y != -1) && (p2.x != -1 && p2.y != -1)) buffer.drawLine(p1.x, p1.y, p2.x, p2.y);
   }
 
   public void drawTri(Tri t){
@@ -325,10 +320,10 @@ public class Render extends Frame{
 
       Point3D cent = t.center();
       if (normal.dotProduct(new Vector(cent.x() - xCam, cent.y() - yCam, cent.z() - zCam)) <= 0) {
-        int[] p1 = drawPoint(p13d);
-        int[] p2 = drawPoint(p23d);
-        int[] p3 = drawPoint(p33d);
-        if(p1[0] == -1 || p2[0] == -1 || p3[0] == -1) return;
+        Point p1 = projectPoint(p13d);
+        Point p2 = projectPoint(p23d);
+        Point p3 = projectPoint(p33d);
+        if(p1.x == -1 || p2.x == -1 || p3.x == -1) return;
 
         Vector lightDist = new Vector(cent.x() - light.x(), cent.y() - light.y(), cent.z() - light.z());
         double dist = light.distanceTo(cent);
@@ -342,32 +337,14 @@ public class Render extends Frame{
         //if(normal.theta() == 0) buffer.setColor(Color.LIGHT_GRAY);
         //if(normal.theta() == Math.PI / 2) buffer.setColor(Color.DARK_GRAY);
 
-        buffer.fillPolygon(new int[]{p1[0], p2[0], p3[0]}, new int[]{p1[1], p2[1], p3[1]}, 3);
+        buffer.fillPolygon(new int[]{p1.x, p2.x, p3.x}, new int[]{p1.y, p2.y, p3.y}, 3);
         if (debug) {
           drawLine(cent, new Point3D(cent.x() + normal.x, cent.y() + normal.y, cent.z() + normal.z));
           buffer.setColor(Color.GREEN);
-          buffer.drawString("" + color, p1[0], p1[1]);
+          buffer.drawString("" + color, p1.x, p1.y);
         }
       }
     }
-  }
-
-  public void drawRasterizedTri(Tri t){
-    Point3D p13d = toRelative(t.getPoint(0));
-    Point3D p23d = toRelative(t.getPoint(1));
-    Point3D p33d = toRelative(t.getPoint(2));
-
-    if (p13d.equals(p23d) || p13d.equals(p33d) || p23d.equals(p33d)) return;
-
-    Vector v1 = new Vector(p13d, p23d);
-    Vector v2 = new Vector(p33d, p23d);
-    Vector normal = (v2.crossProduct(v1)).asUnit();
-
-    Point3D cent = toRelative(t.center());
-
-    if (normal.dotProduct(new Vector(cent.x(), cent.y(), cent.z())) < 0) return;
-
-
   }
 
   public void drawModel(Model m){
@@ -384,10 +361,10 @@ public class Render extends Frame{
 //      tris[j] = t;
 //    }
 
-    sort(m, 0, m.geom.size() - 1);
+//    sort(m, 0, m.geom.size() - 1);
 
     for(Tri tri : tris){
-      drawTri(tri);
+      (new PixelDrawer(tri, this, 0)).run();
     }
   }
 
