@@ -371,10 +371,15 @@ public class Render extends Frame{
       PixelDrawer p2 = new PixelDrawer(tri, this, 1);
       Thread t2 = new Thread(p2);
       t2.setDaemon(true);
+      PixelDrawer p3 = new PixelDrawer(tri, this, 2);
+      Thread t3 = new Thread(p3);
+      t3.setDaemon(true);
       t1.start();
       t2.start();
+      t3.start();
       t1.join();
       t2.join();
+      t3.join();
     }
   }
 

@@ -54,7 +54,7 @@ public class PixelDrawer implements Runnable{
        //if(normal.theta() == 0) g.setColor(Color.LIGHT_GRAY);
        //if(normal.theta() == Math.PI / 2) g.setColor(Color.DARK_GRAY);
 
-        for (int i = Math.min(vert1.x, Math.min(vert2.x, vert3.x)) + offset; i <= Math.max(vert1.x, Math.max(vert2.x, vert3.x)); i+= 2) {
+        for (int i = Math.min(vert1.x, Math.min(vert2.x, vert3.x)) + offset; i <= Math.max(vert1.x, Math.max(vert2.x, vert3.x)); i+= 3) {
             for (int j = yMin; j <= yMax; j++) {
                 Point p = new Point(i, j);
                 double edgeVal1 = edgeFunc(vert1, vert2, p);
