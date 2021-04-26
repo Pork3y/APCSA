@@ -8,6 +8,7 @@ public class PixelDrawer implements Runnable{
     Render r;
     Graphics g;
     int offset;
+    boolean isRunning;
 
     public PixelDrawer(Tri t, Render r, int offset){
 
@@ -18,6 +19,8 @@ public class PixelDrawer implements Runnable{
         }
 
     public void run() {
+
+        isRunning = true;
 
         Point3D p13d = t.getPoint(0);
         Point3D p23d = t.getPoint(1);
@@ -40,18 +43,18 @@ public class PixelDrawer implements Runnable{
         int yMin = Math.min(vert1.y, Math.min(vert2.y, vert3.y));
         int yMax = Math.max(vert1.y, Math.max(vert2.y, vert3.y));
 
-//        Vector lightDist = new Vector(cent.x() - r.light.x(), cent.y() - r.light.y(), cent.z() - r.light.z());
-//        double dist = r.light.distanceTo(cent);
-//        double darken = Math.pow(((-normal.dotProduct(lightDist) / (normal.magnitude() * lightDist.magnitude()) + 1)/ Math.pow(dist, 2)), 1.0 / 4);
-//
-//        int color = (int) (255 * darken);
-//        color = Math.max(0, color);
-//        color = Math.min(255, color);
-//        g.setColor(new Color(color, color, color));
-        if(normal.theta() == 0) g.setColor(Color.LIGHT_GRAY);
-        if(normal.theta() == Math.PI / 2) g.setColor(Color.DARK_GRAY);
+       Vector lightDist = new Vector(cent.x() - r.light.x(), cent.y() - r.light.y(), cent.z() - r.light.z());
+       double dist = r.light.distanceTo(cent);
+       double darken = Math.pow(((-normal.dotProduct(lightDist) / (normal.magnitude() * lightDist.magnitude()) + 1)/ Math.pow(dist, 2)), 1.0 / 4);
 
-        for (int i = Math.min(vert1.x, Math.min(vert2.x, vert3.x)); i <= Math.max(vert1.x, Math.max(vert2.x, vert3.x)); i++) {
+       int color = (int) (255 * darken);
+       color = Math.max(0, color);
+       color = Math.min(255, color);
+       g.setColor(new Color(color, color, color));
+       //if(normal.theta() == 0) g.setColor(Color.LIGHT_GRAY);
+       //if(normal.theta() == Math.PI / 2) g.setColor(Color.DARK_GRAY);
+
+        for (int i = Math.min(vert1.x, Math.min(vert2.x, vert3.x)) + offset; i <= Math.max(vert1.x, Math.max(vert2.x, vert3.x)); i+= 2) {
             for (int j = yMin; j <= yMax; j++) {
                 Point p = new Point(i, j);
                 double edgeVal1 = edgeFunc(vert1, vert2, p);
@@ -62,6 +65,7 @@ public class PixelDrawer implements Runnable{
                 }
             }
         }
+        isRunning = false;
     }
 
 

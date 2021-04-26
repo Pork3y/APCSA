@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
+
 public class Render extends Frame{
   public ArrayList<Model> environment = new ArrayList<>();
   final public BufferedImage nextFrame = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -163,7 +164,7 @@ public class Render extends Frame{
     this(fieldOfView, 0, 0, camCoords);
   }
 
-  public void refresh(){
+  public void refresh() throws InterruptedException {
     if(debug) timer.start();
     Point3D cam = new Point3D(xCam, yCam, zCam);
     //sort(environment, 0, environment.size() - 1);
@@ -347,7 +348,7 @@ public class Render extends Frame{
     }
   }
 
-  public void drawModel(Model m){
+  public void drawModel(Model m) throws InterruptedException {
     Tri[] tris = m.getGeom();
 //    Point3D cam = Point3D.ORIGIN;
 //    for(int i = 1; i < tris.length; i++){
@@ -364,7 +365,16 @@ public class Render extends Frame{
 //    sort(m, 0, m.geom.size() - 1);
 
     for(Tri tri : tris){
-      (new PixelDrawer(tri, this, 0)).run();
+      PixelDrawer p1 = new PixelDrawer(tri, this, 0);
+      Thread t1 = new Thread(p1);
+      t1.setDaemon(true);
+      PixelDrawer p2 = new PixelDrawer(tri, this, 1);
+      Thread t2 = new Thread(p2);
+      t2.setDaemon(true);
+      t1.start();
+      t2.start();
+      t1.join();
+      t2.join();
     }
   }
 
