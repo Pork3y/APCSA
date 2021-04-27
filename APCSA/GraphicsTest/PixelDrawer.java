@@ -37,19 +37,18 @@ public class PixelDrawer implements Runnable{
         Point vert2 = r.projectPoint(p23d);
         Point vert3 = r.projectPoint(p33d);
 
-        int yMin = Math.max(0, Math.min(vert1.y, Math.min(vert2.y, vert3.y)));
-        if(yMin <= 0) return;
-        System.out.println("yMin: " + yMin);
-        int yMax = Math.min(Frame.height, (Math.max(vert1.y, Math.max(vert2.y, vert3.y))));
-        if(yMax >= Frame.height) return;
-        System.out.println("yMax: " + yMax);
+        int yMax = Math.max(0, Math.min(Frame.height - 1, (Math.max(vert1.y, Math.max(vert2.y, vert3.y)))));
+        if(yMax <= 0) return;
+        int yMin = Math.min(Frame.height - 1, Math.max(0, (Math.min(vert1.y, Math.min(vert2.y, vert3.y)))));
+        if(yMin >= Frame.height) return;
 
-        int xMin = Math.max(0, Math.min(vert1.x, Math.min(vert2.x, vert3.x)));
-        if(xMin <= 0) return;
-        System.out.println("xMin: " + xMin);
-        int xMax = Math.min(Frame.width, (Math.max(vert1.x, Math.max(vert2.x, vert3.x))));
-        if(xMax >= Frame.height) return;
-        System.out.println("xMax: " + xMax);
+        int xMax = Math.max(0, Math.min(Frame.width - 1, (Math.max(vert1.x, Math.max(vert2.x, vert3.x)))));
+        if(xMax <= 0) return;
+        int xMin = Math.min(Frame.width - 1, Math.max(0, ((Math.min(vert1.x, Math.min(vert2.x, vert3.x))))));
+        if(xMin >= Frame.height) return;
+
+//        System.out.println("yMin - yMax: " + yMin + " - " + yMax);
+//        System.out.println("xMin - xMax: " + xMin + " - " + xMax);
 
 
 //       Vector lightDist = new Vector(cent.x() - r.light.x(), cent.y() - r.light.y(), cent.z() - r.light.z());
@@ -67,13 +66,13 @@ public class PixelDrawer implements Runnable{
         for (int i = xMin; i <= xMax; i++) {
             for (int j = yMin + offset; j <= yMax; j+= 4) {
                 Point p = new Point(i, j);
+                double area = edgeFunc(vert1, vert2, vert3);
                 double edgeVal1 = edgeFunc(vert1, vert2, p);
                 double edgeVal2 = edgeFunc(vert2, vert3, p);
                 double edgeVal3 = edgeFunc(vert3, vert1, p);
-                double area = edgeFunc(vert1, vert2, vert3);
-                double z = edgeVal1 / area * p33d.distanceTo(cam) + edgeVal2 / area * p13d.distanceTo(cam) + edgeVal3 / area * p23d.distanceTo(cam);
+                double z = edgeVal1 * p33d.distanceTo(cam) / area + edgeVal2 * p13d.distanceTo(cam) / area + edgeVal3 * p23d.distanceTo(cam) / area;
                 if (z < r.zBuffer[j][i].getDist() && edgeVal1 < 0 && edgeVal2 < 0 && edgeVal3 < 0){
-                   r.zBuffer[j][i].setColor(Color.BLACK);
+                   r.zBuffer[j][i].setColor(new Color((int) (edgeVal1 / area * 255), (int) (edgeVal2 / area * 255), (int) (edgeVal3 / area * 255)));
                    r.zBuffer[j][i].setDist(z);
                 }
             }

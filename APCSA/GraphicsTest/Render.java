@@ -188,6 +188,7 @@ public class Render extends Frame{
     (new Thread(m)).start();
 
     Thread t = new Thread(new ImageDrawer(this));
+    t.start();
 
     if(forwardMove) {
       xCam += Math.sin(camAngleX) * dx;

@@ -17,6 +17,7 @@ public class ImageDrawer implements Runnable{
                 if(r.zBuffer[j][i].getColor() != null){
                     g.setColor(r.zBuffer[j][i].getColor());
                     g.drawRect(i, j ,1, 1);
+                    r.zBuffer[j][i] = new Pixel();
                 }
             }
         }

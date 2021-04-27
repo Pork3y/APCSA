@@ -3,8 +3,8 @@ package GraphicsTest;
 import java.awt.Color;
 
 public class Pixel {
-    Color c;
-    double dist;
+    private Color c;
+    private double dist;
 
     public Pixel(Color c){
         this.c = c;
