@@ -13,6 +13,7 @@ import static java.lang.Math.sin;
 
 public class Render extends Frame{
   public ArrayList<Model> environment = new ArrayList<>();
+  public ArrayList<Thread> threads = new ArrayList<>();
   final public BufferedImage nextFrame = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
   final public Graphics buffer = nextFrame.getGraphics();
   final private MouseManager m = new MouseManager();
@@ -28,7 +29,7 @@ public class Render extends Frame{
   private double dx = 0.15;
   final private double sensitivity = 80;
   public Pixel[][] zBuffer = new Pixel[height][width];
-  private boolean forwardMove, leftMove, rightMove, backMove, upMove, downMove;
+  private boolean forwardMove, leftMove, rightMove, backMove, upMove, downMove, pause;
   private boolean debug = false;
   private int count = 0;
   private double FPS;
@@ -83,6 +84,8 @@ public class Render extends Frame{
           case 'd':
             rightMove = true;
             break;
+          case 'p':
+            pause = !pause;
         }
 
         switch (e.getKeyCode()) {
@@ -178,7 +181,14 @@ public class Render extends Frame{
       }
       environment.set(j, m);
     }
-    m.run();
+    for(Model m : environment){
+      drawModel(m);
+    }
+
+    (new Thread(m)).start();
+
+    Thread t = new Thread(new ImageDrawer(this));
+
     if(forwardMove) {
       xCam += Math.sin(camAngleX) * dx;
       zCam += Math.cos(camAngleX) * dx;
@@ -204,9 +214,7 @@ public class Render extends Frame{
     addHorizontalAngle(sensitivity * Math.tan((m.mousePosX - width * 1.0 / 2) / depth));
     addVerticalAngle(sensitivity * Math.tan((m.mousePosY - height * 1.0 / 2) / depth));
 
-    for(Model m : environment){
-      drawModel(m);
-    }
+    t.join();
 
     if(debug){
       timer.stop();
@@ -226,6 +234,7 @@ public class Render extends Frame{
       buffer.drawString("FPS: " + FPS, 0, 140);
     }
     g.drawImage(nextFrame, 0, 0, this);
+    while(pause){}
     buffer.setColor(skyColor);
     buffer.fillRect(0, 0, getWidth(), getHeight());
   }
@@ -363,23 +372,17 @@ public class Render extends Frame{
 //    }
 
 //    sort(m, 0, m.geom.size() - 1);
-
     for(Tri tri : tris){
-      PixelDrawer p1 = new PixelDrawer(tri, this, 0);
-      Thread t1 = new Thread(p1);
-      t1.setDaemon(true);
-      PixelDrawer p2 = new PixelDrawer(tri, this, 1);
-      Thread t2 = new Thread(p2);
-      t2.setDaemon(true);
-      PixelDrawer p3 = new PixelDrawer(tri, this, 2);
-      Thread t3 = new Thread(p3);
-      t3.setDaemon(true);
-      t1.start();
-      t2.start();
-      t3.start();
-      t1.join();
-      t2.join();
-      t3.join();
+      for(int i = 0; i < 4; i++) {
+        PixelDrawer p1 = new PixelDrawer(tri, this, i);
+        Thread t1 = new Thread(p1);
+        t1.setDaemon(true);
+        threads.add(t1);
+        t1.start();
+      }
+    }
+    for(Thread t : threads){
+      t.join();
     }
   }
 

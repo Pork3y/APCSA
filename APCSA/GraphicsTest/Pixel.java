@@ -16,8 +16,16 @@ public class Pixel {
         dist = Double.MAX_VALUE;
     }
 
+    public Color getColor(){
+        return c;
+    }
+
     public void setColor(Color c){
         this.c = c;
+    }
+
+    public double getDist(){
+        return dist;
     }
 
     public void setDist(double dist){
