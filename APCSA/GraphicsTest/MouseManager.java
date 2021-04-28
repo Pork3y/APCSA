@@ -7,8 +7,8 @@ public class MouseManager implements Runnable{
     public int mousePosX;
     public int mousePosY;
     Robot robot;
-    int xCoord = Render.width / 2;
-    int yCoord = Render.height / 2;
+    int xCoord = Frame.width / 2;
+    int yCoord = Frame.height / 2;
 
     public MouseManager() throws AWTException {
         robot = new Robot();
@@ -20,8 +20,8 @@ public class MouseManager implements Runnable{
             mousePosX = p.x;
             mousePosY = p.y;
         // These coordinates are screen coordinates
-        int xCoord = Render.width / 2;
-        int yCoord = Render.height / 2;
+        int xCoord = Frame.width / 2;
+        int yCoord = Frame.height / 2;
 
         // Move the cursor
         robot.mouseMove(xCoord, yCoord);

@@ -15,12 +15,12 @@ public class Main {
       Point3D p3 = new Point3D(50, 0, 100 + height);
       Point3D p4 = new Point3D(50, 100, 150);
 
-      Tri tri1 = new Tri(new Point3D[]{p1, p2, p3});
-      Tri tri2 = new Tri(new Point3D[]{p1, p4, p2});
+      Tri t1 = new Tri(new Point3D[]{p1, p2, p3});
+      Tri t2 = new Tri(new Point3D[]{p1, p4, p2});
       Tri t3 = new Tri(new Point3D[]{p1, p3, p4});
       Tri t4 = new Tri(new Point3D[]{p2, p4, p3});
 
-      //Model m1 = new Model(new Tri[]{t1, t2, t3, t4});
+      Model m1 = new Model(new Tri[]{t1, t2, t3, t4});
 
       r.environment.add(new Block(new Point3D(0, 0, 10)));
 
@@ -34,14 +34,11 @@ public class Main {
 
           //b1.add(m1);
 
-//    Chunk c1 = new Chunk(Point3D.ORIGIN);
-//    r.environment.add(c1.getMesh());
-
+//        Chunk c1 = new Chunk(Point3D.ORIGIN);
+//        r.environment.add(c1.getMesh());
 
 //      Chunk c2 = new Chunk(new Point3D(0, 0, 16));
 //      r.environment.add(c2.getMesh());
-
-
 
       while(true){
         r.refresh();

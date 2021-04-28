@@ -6,14 +6,12 @@ public class PixelDrawer implements Runnable{
 
     Tri t;
     Render r;
-    Graphics g;
     int offset;
 
     public PixelDrawer(Tri t, Render r, int offset){
 
         this.t = t;
         this.r = r;
-        g = r.buffer;
         this.offset = offset;
         }
 
@@ -45,7 +43,7 @@ public class PixelDrawer implements Runnable{
         int xMax = Math.max(0, Math.min(Frame.width - 1, (Math.max(vert1.x, Math.max(vert2.x, vert3.x)))));
         if(xMax <= 0) return;
         int xMin = Math.min(Frame.width - 1, Math.max(0, ((Math.min(vert1.x, Math.min(vert2.x, vert3.x))))));
-        if(xMin >= Frame.height) return;
+        if(xMin >= Frame.width) return;
 
 //        System.out.println("yMin - yMax: " + yMin + " - " + yMax);
 //        System.out.println("xMin - xMax: " + xMin + " - " + xMax);
@@ -64,7 +62,7 @@ public class PixelDrawer implements Runnable{
 
 
         for (int i = xMin; i <= xMax; i++) {
-            for (int j = yMin + offset; j <= yMax; j+= 4) {
+            for (int j = yMin + offset; j <= yMax; j+= 20) {
                 Point p = new Point(i, j);
                 double area = edgeFunc(vert1, vert2, vert3);
                 double edgeVal1 = edgeFunc(vert1, vert2, p);

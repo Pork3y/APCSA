@@ -171,21 +171,15 @@ public class Render extends Frame{
     if(debug) timer.start();
     Point3D cam = new Point3D(xCam, yCam, zCam);
     //sort(environment, 0, environment.size() - 1);
-    for(int i = 1; i < environment.size(); i++){
-      int j = i;
-      Model m = environment.get(i);
-      double dist = m.center().distanceTo(cam);
-      while(j != 0 && dist > environment.get(j - 1).center().distanceTo(cam)){
-        environment.set(j, environment.get(j - 1));
-        j--;
-      }
-      environment.set(j, m);
-    }
     for(Model m : environment){
       drawModel(m);
     }
+    for(Thread t : threads){
+      t.join();
+    }
 
-    (new Thread(m)).start();
+    Thread m1 = new Thread(m);
+    m1.start();
 
     Thread t = new Thread(new ImageDrawer(this));
     t.start();
@@ -212,6 +206,8 @@ public class Render extends Frame{
     if(downMove){
       yCam -= 2 * dx;
     }
+
+    m1.join();
     addHorizontalAngle(sensitivity * Math.tan((m.mousePosX - width * 1.0 / 2) / depth));
     addVerticalAngle(sensitivity * Math.tan((m.mousePosY - height * 1.0 / 2) / depth));
 
@@ -237,7 +233,7 @@ public class Render extends Frame{
     g.drawImage(nextFrame, 0, 0, this);
     while(pause){}
     buffer.setColor(skyColor);
-    buffer.fillRect(0, 0, getWidth(), getHeight());
+    buffer.fillRect(0, 0, Frame.width, Frame.height);
   }
 
   public void addHorizontalAngle(double degrees){
@@ -317,6 +313,7 @@ public class Render extends Frame{
     if((p1.x != -1 && p1.y != -1) && (p2.x != -1 && p2.y != -1)) buffer.drawLine(p1.x, p1.y, p2.x, p2.y);
   }
 
+  @Deprecated
   public void drawTri(Tri t){
     if(toRelative(t.center()).z() > 0) {
       Point3D p13d = t.getPoint(0);
@@ -360,30 +357,15 @@ public class Render extends Frame{
 
   public void drawModel(Model m) throws InterruptedException {
     Tri[] tris = m.getGeom();
-//    Point3D cam = Point3D.ORIGIN;
-//    for(int i = 1; i < tris.length; i++){
-//      int j = i;
-//      Tri t = tris[i];
-//      double dist = (toRelative(t.center()).distanceTo(cam));
-//      while(j != 0 && dist > toRelative(tris[j-1].center()).distanceTo(cam)){
-//        tris[j] = tris[j-1];
-//        j--;
-//      }
-//      tris[j] = t;
-//    }
 
-//    sort(m, 0, m.geom.size() - 1);
     for(Tri tri : tris){
-      for(int i = 0; i < 4; i++) {
+      for(int i = 0; i < 20; i++) {
         PixelDrawer p1 = new PixelDrawer(tri, this, i);
         Thread t1 = new Thread(p1);
         t1.setDaemon(true);
         threads.add(t1);
         t1.start();
       }
-    }
-    for(Thread t : threads){
-      t.join();
     }
   }
 
