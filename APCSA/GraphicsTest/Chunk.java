@@ -1,12 +1,14 @@
 package GraphicsTest;
 
+import java.io.IOException;
+
 public class Chunk {
 
     Model mesh = new Model(new Tri[0]);
     Block[][][] data = new Block[16][32][16];
     Point3D center;
 
-    public Chunk(Point3D center){
+    public Chunk(Point3D center) throws IOException {
         this.center = center;
         for(int i = -8; i < 8; i++){
             for(int j = -16; j < 0; j++){

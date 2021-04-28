@@ -70,7 +70,8 @@ public class PixelDrawer implements Runnable{
                 double edgeVal3 = edgeFunc(vert3, vert1, p);
                 double z = edgeVal1 * p33d.distanceTo(cam) / area + edgeVal2 * p13d.distanceTo(cam) / area + edgeVal3 * p23d.distanceTo(cam) / area;
                 if (z < r.zBuffer[j][i].getDist() && edgeVal1 < 0 && edgeVal2 < 0 && edgeVal3 < 0){
-                   r.zBuffer[j][i].setColor(new Color((int) (edgeVal1 / area * 255), (int) (edgeVal2 / area * 255), (int) (edgeVal3 / area * 255)));
+                    Color color = t.getPixel((int) Math.round(edgeVal2 / area * 15), (int) Math.round(edgeVal3 / area * 15));
+                   r.zBuffer[j][i].setColor(color);
                    r.zBuffer[j][i].setDist(z);
                 }
             }

@@ -1,11 +1,13 @@
 package GraphicsTest;
 
+import java.io.IOException;
+
 public class Block extends Model{
 
     //int blockID;
     //0: Dirt 1: Grass 2: Stone
 
-    public Block(Point3D corner){
+    public Block(Point3D corner) throws IOException {
         super(new Tri[12]);
         Point3D p1 = corner;
         double[] coords = corner.getCoords();
