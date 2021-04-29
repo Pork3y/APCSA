@@ -3,25 +3,25 @@ package GraphicsTest;
 import java.awt.Color;
 
 public class Pixel {
-    private Color c;
+    private Integer color;
     private double dist;
 
     public Pixel(Color c){
-        this.c = c;
+        this.color = c.getRGB();
         dist = Double.MAX_VALUE;
     }
 
     public Pixel(){
-        c = null;
+        color = null;
         dist = Double.MAX_VALUE;
     }
 
     public Color getColor(){
-        return c;
+        return new Color(color);
     }
 
     public void setColor(Color c){
-        this.c = c;
+        this.color = c.getRGB();
     }
 
     public double getDist(){

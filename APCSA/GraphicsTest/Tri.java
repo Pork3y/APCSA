@@ -12,7 +12,7 @@ public class Tri {
     //Must be clockwise oriented when viewed from outside the object for surface normal to be calculated correctly
     BufferedImage texture;
     boolean corner;
-    //true : top left, false : bottom right
+    //true : bottom left, false : top right
 
     public Tri(Point3D[] vertices) throws IOException {
         this.vertices = vertices;
@@ -24,8 +24,8 @@ public class Tri {
         this(new Point3D[]{p1, p2, p3});
     }
 
-    public Tri(Point3D[] verices, String textureName, boolean corner) throws IOException {
-        this.vertices = verices;
+    public Tri(Point3D[] vertices, String textureName, boolean corner) throws IOException {
+        this.vertices = vertices;
         this.texture = ImageIO.read(new File("APCSA/GraphicsTest/" + textureName));
         this.corner = corner;
     }
@@ -46,12 +46,18 @@ public class Tri {
         return vertices[index];
     }
 
-    public Color getPixel(int x, int y){
+    public Color getPixel(int y, int x){
         if(corner){
-            return new Color(texture.getRGB(x, y), false);
+            return new Color(texture.getRGB(x, 15 - y), false);
         } else{
-            return new Color(texture.getRGB(texture.getWidth() - x, texture.getHeight() - y), false);
+            return new Color(texture.getRGB(15 - x, y), false);
         }
     }
 
+    public Vector normal(){
+        Vector v1 = new Vector(vertices[0], vertices[1]);
+        Vector v2 = new Vector(vertices[2], vertices[1]);
+        return v2.crossProduct(v1);
+    }
 }
+

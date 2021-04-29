@@ -15,6 +15,7 @@ public class Render extends Frame{
   public ArrayList<Model> environment = new ArrayList<>();
   public ArrayList<Thread> threads = new ArrayList<>();
   final public BufferedImage nextFrame = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+  public int[] bufferRGB = new int[width * height];
   final public Graphics buffer = nextFrame.getGraphics();
   final private MouseManager m = new MouseManager();
   public double xCam;
@@ -28,7 +29,7 @@ public class Render extends Frame{
   private double depth;
   private double dx = 0.15;
   final private double sensitivity = 80;
-  public Pixel[][] zBuffer = new Pixel[height][width];
+  public double[][] zBuffer = new double[height][width];
   private boolean forwardMove, leftMove, rightMove, backMove, upMove, downMove, pause;
   private boolean debug = false;
   private int count = 0;
@@ -41,7 +42,7 @@ public class Render extends Frame{
     super(width, height);
     for(int i = 0; i < width; i++){
       for(int j = 0; j < height; j++){
-        zBuffer[j][i] = new Pixel();
+        zBuffer[j][i] = Double.MAX_VALUE;
       }
     }
     xCam = camCoords[0];
@@ -231,7 +232,6 @@ public class Render extends Frame{
       buffer.drawString("FPS: " + FPS, 0, 140);
     }
     g.drawImage(nextFrame, 0, 0, this);
-    while(pause){}
     buffer.setColor(skyColor);
     buffer.fillRect(0, 0, Frame.width, Frame.height);
   }
@@ -359,7 +359,7 @@ public class Render extends Frame{
     Tri[] tris = m.getGeom();
 
     for(Tri tri : tris){
-      for(int i = 0; i < 20; i++) {
+      for(int i = 0; i < 30; i++) {
         PixelDrawer p1 = new PixelDrawer(tri, this, i);
         Thread t1 = new Thread(p1);
         t1.setDaemon(true);

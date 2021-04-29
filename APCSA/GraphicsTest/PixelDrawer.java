@@ -23,9 +23,7 @@ public class PixelDrawer implements Runnable{
 
         if (p13d.equals(p23d) || p13d.equals(p33d) || p23d.equals(p33d)) return;
 
-        Vector v1 = new Vector(p13d, p23d);
-        Vector v2 = new Vector(p33d, p23d);
-        Vector normal = v2.crossProduct(v1);
+        Vector normal = t.normal();
 
         Point3D cent = t.center();
 
@@ -48,11 +46,9 @@ public class PixelDrawer implements Runnable{
 //        System.out.println("yMin - yMax: " + yMin + " - " + yMax);
 //        System.out.println("xMin - xMax: " + xMin + " - " + xMax);
 
-
-//       Vector lightDist = new Vector(cent.x() - r.light.x(), cent.y() - r.light.y(), cent.z() - r.light.z());
-//       double dist = r.light.distanceTo(cent);
-//       double darken = Math.pow(((-normal.dotProduct(lightDist) / (normal.magnitude() * lightDist.magnitude()) + 1)/ Math.pow(dist, 2)), 1.0 / 4);
-//
+        double darken1 = darken(p13d);
+        double darken2 = darken(p23d);
+        double darken3 = darken(p33d);
 //       int color = (int) (255 * darken);
 //       color = Math.max(0, color);
 //       color = Math.min(255, color);
@@ -62,17 +58,19 @@ public class PixelDrawer implements Runnable{
 
 
         for (int i = xMin; i <= xMax; i++) {
-            for (int j = yMin + offset; j <= yMax; j+= 20) {
+            for (int j = yMin + offset; j <= yMax; j+= 30) {
                 Point p = new Point(i, j);
                 double area = edgeFunc(vert1, vert2, vert3);
                 double edgeVal1 = edgeFunc(vert1, vert2, p);
                 double edgeVal2 = edgeFunc(vert2, vert3, p);
                 double edgeVal3 = edgeFunc(vert3, vert1, p);
                 double z = edgeVal1 * p33d.distanceTo(cam) / area + edgeVal2 * p13d.distanceTo(cam) / area + edgeVal3 * p23d.distanceTo(cam) / area;
-                if (z < r.zBuffer[j][i].getDist() && edgeVal1 < 0 && edgeVal2 < 0 && edgeVal3 < 0){
-                    Color color = t.getPixel((int) Math.round(edgeVal2 / area * 15), (int) Math.round(edgeVal3 / area * 15));
-                   r.zBuffer[j][i].setColor(color);
-                   r.zBuffer[j][i].setDist(z);
+                if (z < r.zBuffer[j][i] && edgeVal1 < 0 && edgeVal2 < 0 && edgeVal3 < 0){
+                    Color color = t.getPixel((int) (edgeVal3 / area * 16), (int) (edgeVal1 / area * 16));
+                    double darken = darken1 * (edgeVal2 / area) + darken2 * (edgeVal3 / area) + darken3 * (edgeVal1 / area);
+                    r.bufferRGB[j * Frame.width + i] = (new Color((int) (color.getRed() * darken), (int) (color.getGreen() * darken), (int) (color.getBlue() * darken))).getRGB();
+                    //r.bufferRGB[j * Frame.width + i] = color.getRGB();
+                    r.zBuffer[j][i] = z;
                 }
             }
         }
@@ -81,5 +79,11 @@ public class PixelDrawer implements Runnable{
 
     private static double edgeFunc(Point v1, Point v2, Point p){
         return (p.x - v1.x) * (v2.y - v1.y) - (p.y - v1.y) * (v2.x - v1.x);
+    }
+
+    private double darken(Point3D p){
+        Vector lightDist = new Vector(p.x() - r.light.x(), p.y() - r.light.y(), p.z() - r.light.z());
+        double dist = r.light.distanceTo(p);
+        return Math.pow(((-t.normal().dotProduct(lightDist) / (t.normal().magnitude() * lightDist.magnitude()) + 1)/ Math.pow(dist, 2)), 1.0 / 4);
     }
 }
