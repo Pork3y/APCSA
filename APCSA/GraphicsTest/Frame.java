@@ -11,7 +11,7 @@ public class Frame extends JFrame{
     public JPanel canvas;
     public Graphics g;
 
-    public Frame(int width, int height){
+    public Frame(){
 
         canvas = new JPanel();
         canvas.setPreferredSize(d);

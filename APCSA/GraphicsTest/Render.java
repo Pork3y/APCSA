@@ -34,12 +34,12 @@ public class Render extends Frame{
   private boolean debug = false;
   private int count = 0;
   private double FPS;
-  public Point3D light = new Point3D(-2, 5.5, -2);
+  public Point3D light = new Point3D(2.5, 2.5, 0);
   Stopwatch timer = new Stopwatch();
   final Color skyColor = new Color(148, 222, 255);
 
   public Render(double fieldOfView, double angleX, double angleY, double[] camCoords) throws FontFormatException, IOException, AWTException {
-    super(width, height);
+    super();
     for(int i = 0; i < width; i++){
       for(int j = 0; j < height; j++){
         zBuffer[j][i] = Double.MAX_VALUE;
