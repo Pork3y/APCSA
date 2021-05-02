@@ -1,5 +1,6 @@
 package GraphicsTest;
 
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.*;
 import java.awt.event.*;
@@ -16,6 +17,7 @@ public class Render extends Frame{
   public ArrayList<Thread> threads = new ArrayList<>();
   final public BufferedImage nextFrame = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
   public int[] bufferRGB = new int[width * height];
+  public double[][] zBuffer = new double[height][width];
   final public Graphics buffer = nextFrame.getGraphics();
   final private MouseManager m = new MouseManager();
   public double xCam;
@@ -28,15 +30,14 @@ public class Render extends Frame{
   final private double camRoll = 0;
   private double depth;
   private double dx = 0.15;
-  final private double sensitivity = 80;
-  public double[][] zBuffer = new double[height][width];
+  final static private double sensitivity = 80;
   private boolean forwardMove, leftMove, rightMove, backMove, upMove, downMove, pause;
   private boolean debug = false;
   private int count = 0;
   private double FPS;
   public Point3D light = new Point3D(2.5, 2.5, 0);
+  final static Color skyColor = new Color(148, 222, 255);
   Stopwatch timer = new Stopwatch();
-  final Color skyColor = new Color(148, 222, 255);
 
   public Render(double fieldOfView, double angleX, double angleY, double[] camCoords) throws FontFormatException, IOException, AWTException {
     super();
@@ -164,7 +165,7 @@ public class Render extends Frame{
             null ) );
   }
 
-  public Render(double fieldOfView, double[] camCoords) throws FontFormatException, IOException, AWTException, InterruptedException {
+  public Render(double fieldOfView, double[] camCoords) throws FontFormatException, IOException, AWTException{
     this(fieldOfView, 0, 0, camCoords);
   }
 
@@ -172,8 +173,8 @@ public class Render extends Frame{
     if(debug) timer.start();
     Point3D cam = new Point3D(xCam, yCam, zCam);
     //sort(environment, 0, environment.size() - 1);
-    for(Model m : environment){
-      drawModel(m);
+    for(Model mod : environment){
+      drawModel(mod);
     }
     for(Thread t : threads){
       t.join();
@@ -216,7 +217,7 @@ public class Render extends Frame{
 
     if(debug){
       timer.stop();
-      buffer.setColor(Color.BLACK);
+      buffer.setColor(Color.WHITE);
       buffer.drawString("Cam Horizontal Angle: " + toDegrees(camAngleX), 0, 20);
       buffer.drawString("Cam Vertical Angle: " + toDegrees(camAngleY), 0, 40);
       buffer.drawString("Cam Roll: " + toDegrees(camRoll), 0, 60);
@@ -232,8 +233,8 @@ public class Render extends Frame{
       buffer.drawString("FPS: " + FPS, 0, 140);
     }
     g.drawImage(nextFrame, 0, 0, this);
-    buffer.setColor(skyColor);
-    buffer.fillRect(0, 0, Frame.width, Frame.height);
+    buffer.setColor(Color.BLACK);
+    buffer.fillRect(0,0, 1920, 1080);
   }
 
   public void addHorizontalAngle(double degrees){
@@ -289,28 +290,28 @@ public class Render extends Frame{
     return i + 1;
   }
 
-  public Point projectPoint(Point3D p){
+  @Deprecated
+  //Included for compatibility with old drawTri method
+  public Point projectIntPoint(Point3D p){
+    Point2D.Double pDoub = projectPoint(p);
+    return new Point((int) pDoub.x, (int) pDoub.y);
+  }
+
+  public Point2D.Double projectPoint(Point3D p){
     Point3D p1 = toRelative(p);
     double[] point = p1.coords;
 
     //System.out.println(point[0] + " " + point[1] + " " + point[2]);
     if(point[2] > 0){
       double t = depth / point[2];
-      int xProj = (int) Math.round(width * 1.0 / 2 + t * (point[0]));
-      int yProj = (int) Math.round(height * 1.0 / 2 - t * (point[1]));
+      double xProj = (width * 1.0 / 2 + t * (point[0]));
+      double yProj = (height * 1.0 / 2 - t * (point[1]));
       buffer.setColor(Color.BLACK);
       //g2.fillRect(xProj, yProj, 1, 1);
-      return new Point(xProj, yProj);
+      return new Point2D.Double(xProj, yProj);
     } else{
-      return new Point(-1, -1);
+      return new Point2D.Double(-1, -1);
     }
-  }
-
-  public void drawLine(Point3D p13d, Point3D p23d){
-    Point p1 = projectPoint(p13d);
-    Point p2 = projectPoint(p23d);
-    buffer.setColor(Color.BLACK);
-    if((p1.x != -1 && p1.y != -1) && (p2.x != -1 && p2.y != -1)) buffer.drawLine(p1.x, p1.y, p2.x, p2.y);
   }
 
   @Deprecated
@@ -328,9 +329,9 @@ public class Render extends Frame{
 
       Point3D cent = t.center();
       if (normal.dotProduct(new Vector(cent.x() - xCam, cent.y() - yCam, cent.z() - zCam)) <= 0) {
-        Point p1 = projectPoint(p13d);
-        Point p2 = projectPoint(p23d);
-        Point p3 = projectPoint(p33d);
+        Point p1 = projectIntPoint(p13d);
+        Point p2 = projectIntPoint(p23d);
+        Point p3 = projectIntPoint(p33d);
         if(p1.x == -1 || p2.x == -1 || p3.x == -1) return;
 
         Vector lightDist = new Vector(cent.x() - light.x(), cent.y() - light.y(), cent.z() - light.z());
@@ -347,7 +348,7 @@ public class Render extends Frame{
 
         buffer.fillPolygon(new int[]{p1.x, p2.x, p3.x}, new int[]{p1.y, p2.y, p3.y}, 3);
         if (debug) {
-          drawLine(cent, new Point3D(cent.x() + normal.x, cent.y() + normal.y, cent.z() + normal.z));
+          //drawLine(cent, new Point3D(cent.x() + normal.x, cent.y() + normal.y, cent.z() + normal.z));
           buffer.setColor(Color.GREEN);
           buffer.drawString("" + color, p1.x, p1.y);
         }
@@ -360,7 +361,7 @@ public class Render extends Frame{
 
     for(Tri tri : tris){
       for(int i = 0; i < 30; i++) {
-        PixelDrawer p1 = new PixelDrawer(tri, this, i);
+        TriDrawer p1 = new TriDrawer(tri, this, i);
         Thread t1 = new Thread(p1);
         t1.setDaemon(true);
         threads.add(t1);

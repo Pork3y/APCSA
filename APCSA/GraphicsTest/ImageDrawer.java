@@ -17,7 +17,7 @@ public class ImageDrawer implements Runnable{
         for(int i = 0; i < Frame.width; i++){
             for(int j = 0; j < Frame.height; j++){
                 r.zBuffer[j][i] = Double.MAX_VALUE;
-                r.bufferRGB[j * Frame.width + i] = r.skyColor.getRGB();
+                r.bufferRGB[j * Frame.width + i] = Render.skyColor.getRGB();
             }
         }
     }

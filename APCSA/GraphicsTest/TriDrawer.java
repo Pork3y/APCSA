@@ -1,14 +1,15 @@
 package GraphicsTest;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 
-public class PixelDrawer implements Runnable{
+public class TriDrawer implements Runnable{
 
     Tri t;
     Render r;
     int offset;
 
-    public PixelDrawer(Tri t, Render r, int offset){
+    public TriDrawer(Tri t, Render r, int offset){
 
         this.t = t;
         this.r = r;
@@ -29,26 +30,28 @@ public class PixelDrawer implements Runnable{
 
         if (normal.dotProduct(new Vector(cent.x() - r.xCam, cent.y() - r.yCam, cent.z() - r.zCam)) > 0) return;
 
-        Point vert1 = r.projectPoint(p13d);
-        Point vert2 = r.projectPoint(p23d);
-        Point vert3 = r.projectPoint(p33d);
+        Point.Double vert1 = r.projectPoint(p13d);
+        Point.Double vert2 = r.projectPoint(p23d);
+        Point.Double vert3 = r.projectPoint(p33d);
 
-        int yMax = Math.max(0, Math.min(Frame.height - 1, (Math.max(vert1.y, Math.max(vert2.y, vert3.y)))));
+        int yMax = (int) Math.ceil(Math.max(0, Math.min(Frame.height - 1, (Math.max(vert1.y, Math.max(vert2.y, vert3.y))))));
         if(yMax <= 0) return;
-        int yMin = Math.min(Frame.height - 1, Math.max(0, (Math.min(vert1.y, Math.min(vert2.y, vert3.y)))));
+        int yMin = (int) Math.floor(Math.min(Frame.height - 1, Math.max(0, (Math.min(vert1.y, Math.min(vert2.y, vert3.y))))));
         if(yMin >= Frame.height) return;
 
-        int xMax = Math.max(0, Math.min(Frame.width - 1, (Math.max(vert1.x, Math.max(vert2.x, vert3.x)))));
+        int xMax = (int) Math.ceil(Math.max(0, Math.min(Frame.width - 1, (Math.max(vert1.x, Math.max(vert2.x, vert3.x))))));
         if(xMax <= 0) return;
-        int xMin = Math.min(Frame.width - 1, Math.max(0, ((Math.min(vert1.x, Math.min(vert2.x, vert3.x))))));
+        int xMin = (int) Math.floor(Math.min(Frame.width - 1, Math.max(0, ((Math.min(vert1.x, Math.min(vert2.x, vert3.x)))))));
         if(xMin >= Frame.width) return;
+
+
 
 //        System.out.println("yMin - yMax: " + yMin + " - " + yMax);
 //        System.out.println("xMin - xMax: " + xMin + " - " + xMax);
 
-        double darken1 = darken(p13d);
-        double darken2 = darken(p23d);
-        double darken3 = darken(p33d);
+//        double darken1 = darken(p13d);
+//        double darken2 = darken(p23d);
+//        double darken3 = darken(p33d);
 //       int color = (int) (255 * darken);
 //       color = Math.max(0, color);
 //       color = Math.min(255, color);
@@ -77,7 +80,11 @@ public class PixelDrawer implements Runnable{
     }
 
 
-    private static double edgeFunc(Point v1, Point v2, Point p){
+    private static double edgeFunc(Point.Double v1, Point.Double v2, Point p){
+        return (p.x - v1.x) * (v2.y - v1.y) - (p.y - v1.y) * (v2.x - v1.x);
+    }
+
+    private static double edgeFunc(Point.Double v1, Point.Double v2, Point.Double p){
         return (p.x - v1.x) * (v2.y - v1.y) - (p.y - v1.y) * (v2.x - v1.x);
     }
 

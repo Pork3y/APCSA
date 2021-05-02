@@ -16,7 +16,7 @@ public class Tri {
 
     public Tri(Point3D[] vertices) throws IOException {
         this.vertices = vertices;
-        this.texture = ImageIO.read(new File("APCSA/GraphicsTest/stone.png"));
+        this.texture = ImageIO.read(new File("APCSA/GraphicsTest/textures/stone.png"));
         this.corner = true;
     }
 
@@ -26,7 +26,7 @@ public class Tri {
 
     public Tri(Point3D[] vertices, String textureName, boolean corner) throws IOException {
         this.vertices = vertices;
-        this.texture = ImageIO.read(new File("APCSA/GraphicsTest/" + textureName));
+        this.texture = ImageIO.read(new File("APCSA/GraphicsTest/textures/" + textureName));
         this.corner = corner;
     }
 
