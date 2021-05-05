@@ -49,13 +49,13 @@ public class TriDrawer implements Runnable{
 //        System.out.println("yMin - yMax: " + yMin + " - " + yMax);
 //        System.out.println("xMin - xMax: " + xMin + " - " + xMax);
 
-//        double darken1 = darken(p13d);
-//        double darken2 = darken(p23d);
-//        double darken3 = darken(p33d);
+        double darken1 = darken(p13d);
+        double darken2 = darken(p23d);
+        double darken3 = darken(p33d);
 //       int color = (int) (255 * darken);
-//       color = Math.max(0, color);
-//       color = Math.min(255, color);
-//       g.setColor(new Color(color, color, color));
+  //     color = Math.max(0, color);
+    //   color = Math.min(255, color);
+      // g.setColor(new Color(color, color, color));
 
         Point3D cam = new Point3D(r.xCam, r.yCam, r.zCam);
 
@@ -69,10 +69,10 @@ public class TriDrawer implements Runnable{
                 double edgeVal3 = edgeFunc(vert3, vert1, p);
                 double z = edgeVal1 * p33d.distanceTo(cam) / area + edgeVal2 * p13d.distanceTo(cam) / area + edgeVal3 * p23d.distanceTo(cam) / area;
                 if (z < r.zBuffer[j][i] && edgeVal1 < 0 && edgeVal2 < 0 && edgeVal3 < 0){
-                    Color color = t.getPixel((int) (edgeVal3 / area * 16), (int) (edgeVal1 / area * 16));
-                    //double darken = darken1 * (edgeVal2 / area) + darken2 * (edgeVal3 / area) + darken3 * (edgeVal1 / area);
-                    //r.bufferRGB[j * Frame.width + i] = (new Color((int) (color.getRed() * darken), (int) (color.getGreen() * darken), (int) (color.getBlue() * darken))).getRGB();
-                    r.bufferRGB[j * Frame.width + i] = color.getRGB();
+                    Color color = t.getPixel((int) (edgeVal3 / area * t.texture.getHeight()), (int) (edgeVal1 / area * t.texture.getWidth()));
+                    double darken = darken1 * (edgeVal2 / area) + darken2 * (edgeVal3 / area) + darken3 * (edgeVal1 / area);
+                    r.bufferRGB[j * Frame.width + i] = (new Color((int) (color.getRed() * darken), (int) (color.getGreen() * darken), (int) (color.getBlue() * darken))).getRGB();
+                    //r.bufferRGB[j * Frame.width + i] = color.getRGB();
                     r.zBuffer[j][i] = z;
                 }
             }

@@ -7,7 +7,7 @@ import java.io.*;
 
 public class Brick {
 
-    BufferedImage sprite = new BufferedImage(128, 128, BufferedImage.TYPE_INT_RGB);
+    BufferedImage sprite = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
 
     public Brick(Color c){
 
@@ -28,7 +28,7 @@ public class Brick {
                 int blue = c.getBlue() * pixCol.getBlue() / 255;
                 Color newCol = new Color(red, green, blue);
                 g.setColor(newCol);
-                g.fillRect(i * 16, j * 16, 16, 16);
+                g.fillRect(i * 4, j * 4, 4, 4);
             }
         }
     }

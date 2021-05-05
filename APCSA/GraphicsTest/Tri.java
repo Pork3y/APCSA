@@ -48,9 +48,9 @@ public class Tri {
 
     public Color getPixel(int y, int x){
         if(corner){
-            return new Color(texture.getRGB(x, 15 - y), false);
+            return new Color(texture.getRGB(x, texture.getHeight() - 1 - y), false);
         } else{
-            return new Color(texture.getRGB(15 - x, y), false);
+            return new Color(texture.getRGB(texture.getWidth() - 1 - x, y), false);
         }
     }
 

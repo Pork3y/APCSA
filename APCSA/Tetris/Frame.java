@@ -17,7 +17,7 @@ public class Frame extends JFrame{
         cp.add(canvas);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         pack();
-        setTitle("Graphics");
+        setTitle("Tetris");
         setVisible(true);
         setResizable(false);
         g = canvas.getGraphics();
