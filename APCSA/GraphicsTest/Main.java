@@ -13,7 +13,7 @@ public class Main {
 
 //      Block b1 = new Block(new Point3D(0, 0, 5));
 //      r.environment.add(b1);
-      r.environment.add(new Block(new Point3D(0, 1, 5), "jack"));
+      r.environment.add(new Block(new Point3D(0, 1, 5), "cheese"));
 
 //       for(int i = 0; i < 5; i++){
 //             for(int j = 0; j < 5; j++){
