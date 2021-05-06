@@ -46,7 +46,7 @@ public class Tri {
         return vertices[index];
     }
 
-    public Color getPixel(int y, int x){
+    public Color getPixel(int x, int y){
         if(corner){
             return new Color(texture.getRGB(x, texture.getHeight() - 1 - y), false);
         } else{

@@ -3,8 +3,7 @@ package GraphicsTest;
 import java.awt.*;
 import java.io.IOException;
 
-//  TODO: Change from Affine to perspective correct texture mapping
-//        Improve performance a lot. Actually drawing to frame seems like a major bottleneck, so porting to OpenGL might improve it.
+//  TODO: Improve performance a lot. Actually drawing to frame seems like a major bottleneck, so porting to OpenGL might improve it.
 
 public class Main {
 	public static void main(String[] args) throws InterruptedException, FontFormatException, IOException, AWTException {
