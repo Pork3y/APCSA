@@ -170,6 +170,7 @@ public class Render extends Frame{
   }
 
   public void refresh() throws InterruptedException {
+    if(pause) return;
     if(debug) timer.start();
     Point3D cam = new Point3D(xCam, yCam, zCam);
     //sort(environment, 0, environment.size() - 1);

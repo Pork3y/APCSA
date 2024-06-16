@@ -47,15 +47,13 @@ public class TriDrawer implements Runnable{
 //       System.out.println("yMin - yMax: " + yMin + " - " + yMax);
 //       System.out.println("xMin - xMax: " + xMin + " - " + xMax);
 
-//       double darken1 = darken(p13d);
-//       double darken2 = darken(p23d);
-//       double darken3 = darken(p33d);
+       double darken1 = darken(p13d);
+       double darken2 = darken(p23d);
+       double darken3 = darken(p33d);
 //       int color = (int) (255 * darken);
 //       color = Math.max(0, color);
 //       color = Math.min(255, color);
 //       g.setColor(new Color(color, color, color));
-
-        Point3D cam = new Point3D(r.xCam, r.yCam, r.zCam);
 
         p13d = r.toRelative(p13d);
         p23d = r.toRelative(p23d);
@@ -73,9 +71,9 @@ public class TriDrawer implements Runnable{
                 if (z < r.zBuffer[j][i] && edgeVal1 < 0 && edgeVal2 < 0 && edgeVal3 < 0){
                     Color color = t.getPixel((int) (z * ((t.texture.getWidth() * 1.0 / p23d.z()) * edgeVal3 / area)),
                                              (int) (z * ((t.texture.getHeight() * 1.0 / p33d.z()) * edgeVal1 / area)));
-                    //double darken = darken1 * (edgeVal2 / area) + darken2 * (edgeVal3 / area) + darken3 * (edgeVal1 / area);
-                    //r.bufferRGB[j * Frame.width + i] = (new Color((int) (color.getRed() * darken), (int) (color.getGreen() * darken), (int) (color.getBlue() * darken))).getRGB();
-                    r.bufferRGB[j * Frame.width + i] = color.getRGB();
+                    double darken = darken1 * (edgeVal2 / area) + darken2 * (edgeVal3 / area) + darken3 * (edgeVal1 / area);
+                    r.bufferRGB[j * Frame.width + i] = (new Color((int) (color.getRed() * darken), (int) (color.getGreen() * darken), (int) (color.getBlue() * darken))).getRGB();
+                    //r.bufferRGB[j * Frame.width + i] = color.getRGB();
                     r.zBuffer[j][i] = z;
                 }
             }

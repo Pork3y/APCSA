@@ -10,6 +10,9 @@ public class Model {
     public Model(Tri[] geom){
         this.geom = new ArrayList<Tri>(Arrays.asList(geom));
     }
+    public Model(ArrayList<Tri> geom){
+        this.geom = geom;
+    }
 
     public Tri[] getGeom() {
         Tri[] newGeom = new Tri[geom.size()];
